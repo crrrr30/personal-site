@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <SmallNavbar />
       <LargeNavbar />
-      <div className="flex flex-col justify-evenly pad bg-dark h-[calc(100dvh-6rem)] md:h-[calc(100dvh-8rem)]">
+      <div className="flex flex-col justify-evenly pad bg-dark h-fit min-h-[calc(100dvh-6rem)] md:min-h-[calc(100dvh-8rem)]">
         <div className="orpheus text-6xl md:text-8xl !leading-relaxed">
           Researcher,
           <br />
@@ -168,9 +168,9 @@ export default function Home() {
       </div>
       <div className="w-full md:w-[80%] space-y-12 pad bg-dark py-24">
         <p className="section-title">Exploration of the Arts</p>
-        <div className="flex flex-col md:flex-row justify-between border-t-1 py-12 gap-6 md:gap-0">
+        <div className="flex flex-col md:flex-row justify-between border-t-1 py-12 gap-6">
           <p className="orpheus text-xl md:text-2xl">Music</p>
-          <p className="w-full md:w-[50dvw]">
+          <p className="max-w-full md:max-w-[80%]">
             I am a keyboardist primarily focused on worship music, previously
             active at{" "}
             <Link
@@ -197,9 +197,9 @@ export default function Home() {
             .
           </p>
         </div>
-        <div className="flex flex-col md:flex-row justify-between border-t-1 py-12 gap-6 md:gap-0">
+        <div className="flex flex-col md:flex-row justify-between border-t-1 py-12 gap-6">
           <p className="orpheus text-xl md:text-2xl">Graphics Design</p>
-          <p className="w-full md:w-[50dvw]">
+          <p className="max-w-full md:max-w-[80%]">
             Currently employed at the Pennsylvania State University, Harrisburg,
             I create professional posters, banners, and other promotional
             material for the School of Humanities.
