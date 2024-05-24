@@ -65,8 +65,8 @@ export default function Home() {
             >
               Dr. Andrew P. McHugh
             </Link>{" "}
-            on solving Pennes' bioheat equation using perturbation and other
-            numerical methods.
+            on solving Pennes&apos; bioheat equation using perturbation and
+            other numerical methods.
           </p>
 
           <p className="text-xl font-[400]">Publications:</p>

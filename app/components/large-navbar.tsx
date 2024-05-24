@@ -9,7 +9,7 @@ export default function LargeNavBar() {
       </Link>
       <div className="flex gap-16">
         {NavbarLinks().map((item, index) => (
-          <div key={index}>{item}</div>
+          <div key={`small-${index}`}>{item}</div>
         ))}
       </div>
     </div>
