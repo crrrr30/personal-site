@@ -11,7 +11,7 @@ export default function Home() {
     <>
       <SmallNavbar />
       <LargeNavbar />
-      <div className="flex flex-col justify-evenly pad bg-dark h-fit min-h-[calc(100dvh-6rem)] md:min-h-[calc(100dvh-8rem)]">
+      <div className="flex flex-col justify-evenly pad bg-dark h-fit min-h-[calc(100vh-6rem)] md:min-h-[calc(100vh-8rem)]">
         <div className="orpheus text-6xl md:text-8xl !leading-relaxed">
           Researcher,
           <br />
