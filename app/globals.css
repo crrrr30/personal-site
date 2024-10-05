@@ -78,14 +78,6 @@ li {
   list-style-type: disc;
 }
 
-.dark-button {
-  @apply inline-block px-12 py-4 bg-[#28354f] opacity-100 hover:opacity-90 transition-opacity text-white font-[200];
-}
-
-.light-button {
-  @apply inline-block px-12 py-4 bg-white opacity-100 hover:opacity-90 transition-opacity text-black font-[300];
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;

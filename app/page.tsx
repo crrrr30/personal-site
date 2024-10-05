@@ -2,11 +2,11 @@
 
 import React from "react";
 import "@/app/globals.css";
-import { FaChevronDown } from "react-icons/fa6";
 import SmallNavbar from "@/app/components/small-navbar";
 import LargeNavbar from "@/app/components/large-navbar";
 import Link from "next/link";
 import BlurFade from "@/components/ui/blur-fade";
+import { ArrowTopRightIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 export default function Home() {
   return (
@@ -35,7 +35,7 @@ export default function Home() {
                 })
               }
             >
-              <FaChevronDown className="animate-bounce size-6" />
+              <ChevronDownIcon className="animate-bounce size-6" />
             </button>
           </div>
         </div>
@@ -116,8 +116,14 @@ export default function Home() {
               </li>
             </ul>
             <div className="pt-6">
-              <Link className="dark-button" href="/assets/files/Resume.pdf">
+              <Link
+                className="group w-48 h-16 flex justify-center items-center px-12 py-4 bg-[#28354f] opacity-100 hover:opacity-90 transition-opacity text-white font-[200]"
+                href="/assets/files/Resume.pdf"
+              >
                 Résumé
+                <span className="w-0 group-hover:w-8 transition-size overflow-hidden">
+                  <ArrowTopRightIcon className="ml-auto size-4" />
+                </span>
               </Link>
             </div>
           </BlurFade>
@@ -230,10 +236,13 @@ export default function Home() {
             </p>
           </div>
           <Link
-            className="light-button"
+            className="group w-48 h-16 flex justify-center items-center  bg-white opacity-100 hover:opacity-90 transition-opacity text-black font-[300]"
             href="https://sway.office.com/qHuaPGQEKeIjePnJ"
           >
             Portfolio
+            <span className="w-0 group-hover:w-8 transition-size overflow-hidden">
+              <ArrowTopRightIcon className="ml-auto size-4" />
+            </span>
           </Link>
         </BlurFade>
       </div>
