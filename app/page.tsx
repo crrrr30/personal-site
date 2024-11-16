@@ -46,11 +46,12 @@ export default function Home() {
           <BlurFade delay={0.25} inView className="w-full md:w-[50%] space-y-8">
             <p className="section-title">Academic Work</p>
             <p>
-              I am a third-year student of Computer Science at UC San Diego. I
-              studied at Penn State previously for two years with a 4.0 GPA in
-              Computer Science and Mathematics, whereby I have been awarded the
-              President Walker Award. I am heavily involved in machine learning
-              and mathematics research. Working with{" "}
+              I am a third-year student of Computer Science at UC San Diego,
+              minoring in Mathematics. I studied at Penn State previously for
+              two years with a 4.0 GPA in Computer Science and Mathematics I am
+              heavily involved in machine learning and mathematics research,
+              accumulating over 300 citations. My prior work at Penn State was
+              primarily with{" "}
               <Link
                 href="https://scholar.google.com/citations?user=hEZSgf0AAAAJ&hl=en&oi=ao"
                 className="black-link"
@@ -64,9 +65,7 @@ export default function Home() {
               >
                 Dr. Suman Saha
               </Link>
-              , I have won the Top Overall Poster Award at the 2023 MC REU
-              Symposium, and the paper is in review under minor revision at IEEE
-              Transaction on Artificial Intelligence. I am also working with{" "}
+              . I am also working with{" "}
               <Link
                 href="https://scholar.google.com/citations?user=c0_JYoEAAAAJ&hl=en&oi=sra"
                 className="black-link"
@@ -99,9 +98,11 @@ export default function Home() {
                 101991.
               </li>
               <li>
-                Cui, J., Araujo, D. A., Saha, S., & Kabir, M. F. (2023).
-                CS-Mixer: A cross-scale vision MLP model with spatial-channel
-                mixing. <i>arXiv preprint arXiv:2308.13363</i>.
+                Cui, J., Araujo, D. A., Saha, S., & Kabir, M. F. (2024).
+                CS-Mixer: A Cross-Scale Vision Multi-Layer Perceptron with
+                Spatial–Channel Mixing.{" "}
+                <i>IEEE Transactions on Artificial Intelligence</i>, <i>1</i>
+                (01), 1-13.
               </li>
               <li>
                 Cui, J. & Araujo, D. A. (2024). Rethinking use-restricted
@@ -164,22 +165,22 @@ export default function Home() {
               <p className="font-bold mb-4">Notes from Penn State</p>
               <p>
                 <Link className="black-link" href="/assets/files/401.pdf">
-                  MATH 401
+                  Real Analysis
                 </Link>
               </p>
               <p>
                 <Link className="black-link" href="/assets/files/436.pdf">
-                  MATH 436
+                  Linear Algebra
                 </Link>
               </p>
               <p>
                 <Link className="black-link" href="/assets/files/464.pdf">
-                  CMPSC 464
+                  Theory of Computation
                 </Link>
               </p>
               <p>
                 <Link className="black-link" href="/assets/files/435.pdf">
-                  MATH 435
+                  Abstract Algebra
                 </Link>
               </p>
             </div>
@@ -187,7 +188,7 @@ export default function Home() {
               <p className="font-bold mb-4">Notes from UC San Diego</p>
               <p>
                 <Link className="black-link" href="/assets/files/144.pdf">
-                  MATH 144
+                  Fourier Analysis
                 </Link>
               </p>
             </div>
