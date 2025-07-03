@@ -1,0 +1,41 @@
+.inverted-link {
+  text-decoration: none;
+  background: linear-gradient(to right, white, white);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+
+.inverted-link:hover,
+.inverted-link:focus {
+  background-size: 100% 1px;
+}
+
+.black-link {
+  text-decoration: none;
+  background: linear-gradient(to right, black, black);
+  background-size: 100% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+
+.black-link:hover,
+.black-link:focus {
+  background-size: 0 1px;
+}
+
+.white-link {
+  text-decoration: none;
+  background: linear-gradient(to right, white, white);
+  background-size: 100% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+
+.white-link:hover,
+.white-link:focus {
+  background-size: 0 1px;
+}
