@@ -2,6 +2,12 @@
 
 import { useEffect } from "react";
 
+import { PageInViewContext } from "@/app/providers/PageInViewContext";
+import { Button } from "@/components/Button";
+import { NavBar } from "@/components/NavBar";
+import SplitText from "@/components/SplitText";
+import { cn } from "@/lib/utils";
+
 export default function Error({
   error,
   reset,
@@ -16,16 +22,31 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
-        Try again
-      </button>
-    </div>
+    <PageInViewContext.Provider value={true}>
+      <div className={cn("w-screen h-screen", "flex flex-col")}>
+        <NavBar />
+
+        <div
+          className={cn(
+            "px-16 pb-48",
+            "grow",
+            "flex flex-col justify-end items-start gap-32",
+          )}
+        >
+          <div
+            className={cn(
+              "[&_*]:text-[144px] [&_*]:tracking-tighter [&_*]:leading-[0.75em]",
+              "flex flex-col items-start",
+            )}
+          >
+            <SplitText delay={0} text="Something" />
+            <SplitText delay={0.15} text="went" />
+            <SplitText delay={0.3} text="wrong" />
+          </div>
+
+          <Button onPress={() => reset()}>Try again</Button>
+        </div>
+      </div>
+    </PageInViewContext.Provider>
   );
 }

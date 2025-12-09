@@ -1,0 +1,27 @@
+.inverted-link {
+  text-decoration: none;
+  background: linear-gradient(to right, currentColor, currentColor);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+
+.inverted-link:hover,
+.inverted-link:focus {
+  background-size: 100% 1px;
+}
+
+.underlined-link {
+  text-decoration: none;
+  background: linear-gradient(to right, currentColor, currentColor);
+  background-size: 100% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms;
+}
+
+.underlined-link:hover,
+.underlined-link:focus {
+  background-size: 0 1px;
+}

@@ -4,11 +4,14 @@ import {
   AnimatePresence,
   motion,
   useInView,
-  UseInViewOptions,
-  Variants,
-  MotionProps,
-} from "framer-motion";
-import { useRef } from "react";
+  type UseInViewOptions,
+  type Variants,
+  type MotionProps,
+} from "motion/react";
+import { useContext, useRef } from "react";
+
+import { homePageEasing } from "@/app/page";
+import { PageInViewContext } from "@/app/providers/PageInViewContext";
 
 type MarginType = UseInViewOptions["margin"];
 
@@ -21,9 +24,8 @@ interface BlurFadeProps extends MotionProps {
   };
   duration?: number;
   delay?: number;
-  offset?: number;
+  offset?: `${number}${"em" | "px"}`;
   direction?: "up" | "down" | "left" | "right";
-  inView?: boolean;
   inViewMargin?: MarginType;
   blur?: string;
 }
@@ -32,22 +34,22 @@ export function BlurFade({
   children,
   className,
   variant,
-  duration = 0.4,
+  duration = 1.6,
   delay = 0,
-  offset = 6,
-  direction = "down",
-  inView = false,
+  offset = "0.5em",
+  direction = "up",
   inViewMargin = "-50px",
   blur = "6px",
   ...props
 }: BlurFadeProps) {
   const ref = useRef(null);
+  const pageInView = useContext(PageInViewContext);
   const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
-  const isInView = !inView || inViewResult;
+  const isInView = pageInView && inViewResult;
   const defaultVariants: Variants = {
     hidden: {
       [direction === "left" || direction === "right" ? "x" : "y"]:
-        direction === "right" || direction === "down" ? -offset : offset,
+        direction === "right" || direction === "down" ? `-${offset}` : offset,
       opacity: 0,
       filter: `blur(${blur})`,
     },
@@ -58,20 +60,26 @@ export function BlurFade({
     },
   };
   const combinedVariants = variant || defaultVariants;
+
   return (
     <AnimatePresence>
       <motion.div
         ref={ref}
-        initial="hidden"
         animate={isInView ? "visible" : "hidden"}
+        className={className}
         exit="hidden"
-        variants={combinedVariants}
+        initial="hidden"
         transition={{
           delay: 0.04 + delay,
           duration,
-          ease: "easeOut",
+          // type: "spring",
+          // stiffness: 72,
+          // damping: 12,
+          // restDelta: 0.001,
+          // ease: "easeOut",
+          ...homePageEasing,
         }}
-        className={className}
+        variants={combinedVariants}
         {...props}
       >
         {children}

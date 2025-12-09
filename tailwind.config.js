@@ -14,13 +14,18 @@ const config = {
         light: {
           layout: {},
           colors: {
-            background: "#2a2829",
-            foreground: "#e0e0db",
+            background: "#ffffff",
+            foreground: "#000000",
+            brand: "#0c25d4",
           },
         },
         dark: {
           layout: {},
-          colors: { background: "#2a2829", foreground: "#e0e0db" },
+          colors: {
+            background: "#ffffff",
+            foreground: "#000000",
+            brand: "#0c25d4",
+          },
         },
         fontFamily: {},
       },
