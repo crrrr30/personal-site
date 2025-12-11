@@ -229,11 +229,8 @@ const SplitText: React.FC<SplitTextProps> = ({
     [text, animationLevel],
   );
 
-  const fromSignature = useMemo(() => JSON.stringify(from), [from]);
-  const toSignature = useMemo(() => JSON.stringify(to), [to]);
-
-  const hiddenState = useMemo<Target>(() => ({ ...from }), [fromSignature]);
-  const visibleState = useMemo<Target>(() => ({ ...to }), [toSignature]);
+  const hiddenState = useMemo<Target>(() => ({ ...from }), [from]);
+  const visibleState = useMemo<Target>(() => ({ ...to }), [to]);
   const variants = useMemo<Variants>(
     () => ({ hidden: hiddenState, visible: visibleState }),
     [hiddenState, visibleState],
@@ -261,7 +258,7 @@ const SplitText: React.FC<SplitTextProps> = ({
     completedCountRef.current = 0;
     animationCompletedRef.current = false;
     setHasAnimated(false);
-  }, [text, animationLevel, fromSignature, toSignature, duration, splitDelay]);
+  }, [text, animationLevel, from, to, duration, splitDelay]);
 
   useEffect(() => {
     if (!hasAnimated && fontsLoaded && isInView) {

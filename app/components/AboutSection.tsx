@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "motion/react";
 import Image from "next/image";
 import { type ReactNode, type FC, Fragment } from "react";
@@ -11,17 +13,21 @@ import { cn } from "@/lib/utils";
 
 export const AboutSection = () => {
   return (
-    <section className="relative">
+    <section className="relative overflow-hidden" data-panel="about">
       <div
-        className={cn("mx-auto max-w-container py-24", "flex flex-col gap-12")}
+        className={cn(
+          "relative mx-auto flex flex-col gap-12",
+          "max-w-container py-24",
+        )}
+        data-panel-inner=""
       >
         <h3 className="text-4xl text-brand font-medium">ABOUT SECTION</h3>
 
         <AboutList />
-      </div>
 
-      <div className={cn("w-[22.5rem]", "absolute bottom-0 right-0")}>
-        <Image alt="" src={secondaryPortrait} />
+        <div className={cn("w-[22.5rem]", "absolute bottom-0 right-0")}>
+          <Image alt="" src={secondaryPortrait} />
+        </div>
       </div>
     </section>
   );

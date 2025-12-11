@@ -28,10 +28,17 @@ export const ProjectsSection: FC = () => {
 
   return (
     <section
-      className={cn("full-bleed px-6", "bg-brand text-white")}
+      className={cn(
+        "relative overflow-hidden",
+        "full-bleed px-6 bg-brand text-white",
+      )}
+      data-panel="projects"
       id="projects"
     >
-      <div className={cn("mx-auto max-w-[1280px]", "p-16")}>
+      <div
+        className={cn("mx-auto flex flex-col", "max-w-[1280px] p-16")}
+        data-panel-inner=""
+      >
         <div className="flex flex-col">
           <TitleFadeIn />
         </div>

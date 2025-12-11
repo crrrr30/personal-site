@@ -2,17 +2,15 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Image from "next/image";
 import { useRef, useState, type FC } from "react";
 
 import { HomeContent } from "@/app/components/HomeContent";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import flowy from "@/assets/flowy.png";
-import { appEasing } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
 const hideAnimation = false;
-const APP_EASE_PATH = `M0,0 C${appEasing.ease[0]},${appEasing.ease[1]} ${appEasing.ease[2]},${appEasing.ease[3]} 1,1`;
-const DEFAULT_EASE = gsap.parseEase(APP_EASE_PATH);
 const FRAME_SELECTOR = ".frame";
 const LEFT_SELECTOR = ".left";
 const RIGHT_SELECTOR = ".right";
@@ -43,7 +41,6 @@ const HomePage: FC = () => {
         delay: 0.3,
         defaults: {
           duration: 1.1,
-          // ease: DEFAULT_EASE,
           ease: "expo.inOut",
         },
         onComplete: () => setAnimationComplete(true),
@@ -101,7 +98,14 @@ const HomePage: FC = () => {
               willChange: animationComplete ? "auto" : "transform",
             }}
           >
-            <img className="h-full w-full object-cover" src={flowy.src} />
+            <Image
+              fill
+              priority
+              alt=""
+              className="h-full w-full object-cover"
+              sizes="100vw"
+              src={flowy}
+            />
 
             <div
               className={cn(

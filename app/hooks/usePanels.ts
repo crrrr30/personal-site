@@ -1,207 +1,167 @@
+"use client";
+
+import type { DependencyList, RefObject } from "react";
+
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-var panels = gsap.utils.toArray("section") as HTMLElement[];
+type UsePanelsOptions = {
+  /** Optional ref that scopes which DOM subtree we look in for panels */
+  scope?: RefObject<HTMLElement | null>;
+  /** Optional ref representing the scroll container (Lenis wrapper, etc.) */
+  scroller?: RefObject<HTMLElement | null>;
+  /** CSS selector used to find each panel */
+  panelSelector?: string;
+  /** CSS selector (relative to panel) used to find the content wrapper */
+  innerSelector?: string;
+  /** Skip animating the last panel (matches original example) */
+  skipLast?: boolean;
+  /** Target scale for the pinned panel */
+  minScale?: number;
+  /** Target opacity for the pinned panel */
+  minOpacity?: number;
+  /** Additional dependencies that should retrigger the hook */
+  dependencies?: DependencyList;
+  /** Allow consumers to delay initialization until external state is ready */
+  enabled?: boolean;
+};
 
-panels.pop();
+export const usePanels = ({
+  scope,
+  scroller,
+  panelSelector = "[data-panel]",
+  innerSelector = "[data-panel-inner]",
+  skipLast = true,
+  minScale = 0.7,
+  minOpacity = 0.5,
+  dependencies = [],
+  enabled = true,
+}: UsePanelsOptions = {}) => {
+  useGSAP(
+    () => {
+      if (!enabled || typeof window === "undefined") return;
 
-panels.forEach((panel) => {
-  // Get the element holding the content inside the panel
-  let innerpanel = panel.querySelector(".section-inner") as HTMLElement;
+      const getPanels = () => {
+        if (scope?.current) {
+          return Array.from(
+            scope.current.querySelectorAll<HTMLElement>(panelSelector),
+          );
+        }
 
-  // Get the Height of the content inside the panel
-  let panelHeight = innerpanel.offsetHeight;
+        return Array.from(
+          document.querySelectorAll<HTMLElement>(panelSelector),
+        );
+      };
 
-  // Get the window height
-  let windowHeight = window.innerHeight;
+      const timelinesByPanel = new Map<HTMLElement, gsap.core.Timeline>();
 
-  let difference = panelHeight - windowHeight;
+      const cleanupPanel = (panel: HTMLElement) => {
+        const timeline = timelinesByPanel.get(panel);
 
-  // ratio (between 0 and 1) representing the portion of the overall animation that's for the fake-scrolling. We know that the scale & fade should happen over the course of 1 windowHeight, so we can figure out the ratio based on how far we must fake-scroll
-  let fakeScrollRatio =
-    difference > 0 ? difference / (difference + windowHeight) : 0;
+        if (timeline) {
+          timeline.kill();
+          timelinesByPanel.delete(panel);
+        }
+        panel.style.removeProperty("margin-bottom");
+      };
 
-  // if we need to fake scroll (because the panel is taller than the window), add the appropriate amount of margin to the bottom so that the next element comes in at the proper time.
-  if (fakeScrollRatio) {
-    panel.style.marginBottom = panelHeight * fakeScrollRatio + "px";
-  }
+      const buildTimelines = () => {
+        timelinesByPanel.forEach((_, panel) => cleanupPanel(panel));
 
-  let tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: panel,
-      start: "bottom bottom",
-      end: () =>
-        fakeScrollRatio ? `+=${innerpanel.offsetHeight}` : "bottom top",
-      pinSpacing: false,
-      pin: true,
-      scrub: true,
+        const panels = getPanels();
+
+        if (!panels.length) return;
+
+        if (skipLast) {
+          panels.pop();
+        }
+
+        const scrollerElement =
+          scroller?.current ?? scope?.current ?? undefined;
+
+        panels.forEach((panel) => {
+          const inner = panel.querySelector<HTMLElement>(innerSelector);
+
+          if (!inner) return;
+
+          const panelHeight = inner.offsetHeight;
+          const windowHeight = window.innerHeight;
+          const fakeScrollDistance = Math.max(panelHeight - windowHeight, 0);
+          const pinDistance = panelHeight || windowHeight;
+          const fakeScrollRatio = pinDistance
+            ? fakeScrollDistance / pinDistance
+            : 0;
+
+          if (fakeScrollDistance) {
+            panel.style.marginBottom = `${fakeScrollDistance}px`;
+          } else {
+            panel.style.removeProperty("margin-bottom");
+          }
+
+          const timeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: panel,
+              scroller: scrollerElement,
+              start: "top top",
+              end: `+=${pinDistance}`,
+              pinSpacing: false,
+              pin: true,
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          if (fakeScrollRatio) {
+            timeline.to(inner, {
+              yPercent: -100,
+              y: windowHeight,
+              duration: 1 / (1 - fakeScrollRatio) - 1,
+              ease: "none",
+            });
+          }
+
+          timeline
+            .fromTo(
+              panel,
+              { scale: 1, opacity: 1 },
+              { scale: minScale, opacity: minOpacity, duration: 0.9 },
+            )
+            .to(panel, { opacity: 0, duration: 0.1 });
+
+          timelinesByPanel.set(panel, timeline);
+        });
+      };
+
+      buildTimelines();
+
+      const handleRefresh = () => {
+        buildTimelines();
+      };
+
+      ScrollTrigger.addEventListener("refreshInit", handleRefresh);
+      ScrollTrigger.refresh();
+
+      return () => {
+        ScrollTrigger.removeEventListener("refreshInit", handleRefresh);
+        timelinesByPanel.forEach((_, panel) => cleanupPanel(panel));
+      };
     },
-  });
-
-  // fake scroll. We use 1 because that's what the rest of the timeline consists of (0.9 scale + 0.1 fade)
-  if (fakeScrollRatio) {
-    tl.to(innerpanel, {
-      yPercent: -100,
-      y: window.innerHeight,
-      duration: 1 / (1 - fakeScrollRatio) - 1,
-      ease: "none",
-    });
-  }
-  tl.fromTo(
-    panel,
-    { scale: 1, opacity: 1 },
-    { scale: 0.7, opacity: 0.5, duration: 0.9 },
-  ).to(panel, { opacity: 0, duration: 0.1 });
-});
-
-// example html:
-// <div class="slides-wrapper">
-//   <section class="section section-1">
-//     <div class="section-content">
-//       <div class="section-inner">
-//         <h1>Section 1</h1>
-//         <img class="image" src="https://assets.codepen.io/16327/portrait-image-3.jpg" alt="" />
-//       </div>
-//     </div>
-//   </section>
-//   <section class="section section-2">
-//     <div class="section-content">
-//       <div class="section-inner">
-//         <h1>Section 2</h1>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This section is long with text content and needs to be scrollable within before the next slide comes in.</p>
-//         <p>This is the end...</p>
-//       </div>
-//     </div>
-//   </section>
-//   <section class="section section-3">
-//     <div class="section-content">
-//       <div class="section-inner">
-//         <h1>Section 3</h1>
-//         <img class="image" src="https://assets.codepen.io/16327/portrait-image-4.jpg" alt="" />
-//       </div>
-//     </div>
-//   </section>
-//   <section class="section section-4">
-//     <div class="section-content">
-//       <div class="section-inner">
-//         <h1>Section 4</h1>
-//         <img class="image" src="https://assets.codepen.io/16327/portrait-image-2.jpg" alt="" />
-//       </div>
-//     </div>
-//   </section>
-// </div>
-
-// example css:
-// html,
-// body {
-//   margin: 0;
-//   height: 100%;
-//   -webkit-overflow-scrolling: touch;
-//   overflow-scrolling: touch;
-// }
-
-// body {
-//   overflow-x: hidden;
-//   overflow-y: scroll;
-// }
-
-// .nav {
-//   width: 100%;
-//   height: 60px;
-//   position: fixed;
-//   top: 0;
-//   z-index: 999;
-//   display: flex;
-//   color: #fff;
-//   background: #000;
-//   justify-content: space-between;
-// }
-
-// .nav-links {
-//   display: flex;
-// }
-
-// .slides-wrapper {
-//   margin-top: 63px;
-// }
-
-// .image {
-//   width: 50%;
-//   aspect-ratio: 1/1;
-//   object-fit: cover;
-//   margin-top: 2.5rem;
-// }
-
-// .section {
-//   width: 100%;
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   font-weight: 600;
-//   font-size: 1.5em;
-//   text-align: center;
-//   position: relative;
-//   box-sizing: border-box;
-//   background: var(--color-grey);
-//   overflow: hidden;
-// /*   border-radius: 10px; */
-// }
-
-// p {
-//   max-width: 40ch;
-//   padding: 2rem
-// }
-
-// .section-inner {
-//   height: 100%;
-//   overflow: hidden;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center
-// }
-
-// .section-2 .section-inner {
-//   height: auto;
-//   padding-bottom: 20vh;
-// }
-
-// .section-2 {
-//   background: var(--color-scroll-pink-lt);
-//   color: var(--dark);
-// }
-
-// .section-1 {
-//   background: var(--light);
-//   color: var(--dark);
-// }
-
-// .section-4 {
-//   background: var(--color-text-purple);
-//   color: var(--dark);
-// }
-// .height {
-//   border: dashed 2px grey;
-//   padding: 1rem;
-//   padding-bottom: 5rem;
-// }
-
-// .section h1 {
-//   font-size: max(4rem, min(12vw + 1rem, 16rem));
-//   font-weight: 600;
-//   margin: 0 auto;
-// }
-
-// img {
-// /*   border-radius: 8px; */
-// }
+    {
+      scope,
+      dependencies: [
+        scope?.current,
+        scroller?.current,
+        panelSelector,
+        innerSelector,
+        skipLast,
+        minScale,
+        minOpacity,
+        enabled,
+        ...dependencies,
+      ],
+    },
+  );
+};

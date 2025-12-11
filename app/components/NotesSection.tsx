@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "motion/react";
 import { type ReactNode, type FC, Fragment } from "react";
 
@@ -10,12 +12,21 @@ import { cn } from "@/lib/utils";
 
 export const NotesSection = () => {
   return (
-    <section className={cn("page-px py-24", "flex flex-col gap-12")} id="notes">
-      <h3 className="text-4xl text-brand font-medium">NOTES SECTION</h3>
+    <section
+      className={cn("relative overflow-hidden")}
+      data-panel="notes"
+      id="notes"
+    >
+      <div
+        className={cn("page-px py-24", "flex flex-col gap-12")}
+        data-panel-inner=""
+      >
+        <h3 className="text-4xl text-brand font-medium">NOTES SECTION</h3>
 
-      <SplitHeadline />
+        <SplitHeadline />
 
-      <NotesList />
+        <NotesList />
+      </div>
     </section>
   );
 };

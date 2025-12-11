@@ -101,7 +101,7 @@ export default defineConfig([globalIgnores([
     "react/prop-types": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/exhaustive-deps": "warn",
     "jsx-a11y/click-events-have-key-events": "warn",
     "jsx-a11y/interactive-supports-focus": "warn",
     "prettier/prettier": "warn",
@@ -114,6 +114,11 @@ export default defineConfig([globalIgnores([
       ignoreRestSiblings: false,
       argsIgnorePattern: "^_.*?$",
     }],
+
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-var": "error",
+    "prefer-const": ["warn", { destructuring: "all" }],
+    "eqeqeq": ["warn", "smart"],
 
     "import/order": ["warn", {
       groups: [
