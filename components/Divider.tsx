@@ -6,8 +6,8 @@ import {
 } from "motion/react";
 import { useContext, useRef } from "react";
 
-import { homePageEasing } from "@/app/page";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
+import { appEasing } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
 type MarginType = UseInViewOptions["margin"];
@@ -17,7 +17,7 @@ export function Divider({
   delay = 0,
   vertical = false,
   from = "center",
-  duration = 1.6,
+  duration = 2,
   inViewMargin = "-50px",
 }: {
   className?: string;
@@ -58,7 +58,7 @@ export function Divider({
         transition={{
           delay: 0.04 + delay,
           duration,
-          ...homePageEasing,
+          ...appEasing,
           // type: "spring",
           // stiffness: 72,
           // damping: 18,

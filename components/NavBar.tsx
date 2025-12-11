@@ -27,13 +27,13 @@ export function NavBar() {
 
   return (
     <nav className="flex flex-row justify-between px-16 py-8">
-      <BlurFade>
+      <BlurFade offset="2em">
         <p>BEHIND THE SCENES</p>
       </BlurFade>
 
       <span className="flex flex-row gap-32">
         {links.map(({ text, sectionId }, index) => (
-          <BlurFade key={index} delay={0.1 * (index + 1)}>
+          <BlurFade key={index} delay={0.2 * (index + 1)}>
             <Link
               href={`#${sectionId}`}
               variant="inverted"

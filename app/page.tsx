@@ -1,80 +1,77 @@
 "use client";
 
-import { motion, useAnimate } from "motion/react";
-import { useEffect, useState, type FC } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useRef, useState, type FC } from "react";
 
 import { HomeContent } from "@/app/components/HomeContent";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import flowy from "@/assets/flowy.png";
+import { appEasing } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
-export const homePageEasing = { ease: [0.16, 1, 0.3, 1] } as const;
+const hideAnimation = false;
+const APP_EASE_PATH = `M0,0 C${appEasing.ease[0]},${appEasing.ease[1]} ${appEasing.ease[2]},${appEasing.ease[3]} 1,1`;
+const DEFAULT_EASE = gsap.parseEase(APP_EASE_PATH);
+const FRAME_SELECTOR = ".frame";
+const LEFT_SELECTOR = ".left";
+const RIGHT_SELECTOR = ".right";
+
+gsap.registerPlugin(useGSAP);
 
 const HomePage: FC = () => {
-  const [scope, animate] = useAnimate();
-  const [animationComplete, setAnimationComplete] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [animationComplete, setAnimationComplete] = useState(hideAnimation);
 
-  useEffect(() => {
-    let cancelled = false;
+  useGSAP(
+    () => {
+      if (hideAnimation) {
+        setAnimationComplete(true);
 
-    const run = async () => {
-      try {
-        // 1) zoom image frame outward
-        await Promise.all([
-          animate(
-            ".frame",
-            { scale: 1 },
-            {
-              duration: 1.1,
-              ...homePageEasing,
-            },
-          ),
-          animate(
-            ".left",
-            { x: "1em" },
-            {
-              duration: 1.1,
-              ...homePageEasing,
-            },
-          ),
-          animate(
-            ".right",
-            { x: "-1em" },
-            {
-              duration: 1.1,
-              ...homePageEasing,
-            },
-          ),
-        ]);
-
-        // 2) dock image to the top = move frame upward
-        await animate(
-          ".frame",
-          { y: "-100vh" },
-          {
-            duration: 0.8,
-            ...homePageEasing,
-          },
-        );
-      } finally {
-        if (!cancelled) {
-          setAnimationComplete(true);
-        }
+        return;
       }
-    };
 
-    const timeoutId = setTimeout(run, 300);
+      gsap.set(FRAME_SELECTOR, {
+        scale: 0.5,
+        y: 0,
+        transformOrigin: "center",
+      });
 
-    return () => {
-      cancelled = true;
-      clearTimeout(timeoutId);
-    };
-  }, [animate]);
+      gsap.set([LEFT_SELECTOR, RIGHT_SELECTOR], { x: 0 });
 
-  return (
+      const timeline = gsap.timeline({
+        delay: 0.3,
+        defaults: {
+          duration: 1.1,
+          // ease: DEFAULT_EASE,
+          ease: "expo.inOut",
+        },
+        onComplete: () => setAnimationComplete(true),
+      });
+
+      timeline
+        // 1) zoom image frame outward and pull hero text apart
+        .to(FRAME_SELECTOR, { scale: 1 }, 0)
+        .to(LEFT_SELECTOR, { x: "1em" }, 0)
+        .to(RIGHT_SELECTOR, { x: "-1em" }, 0)
+        // 2) dock image to the top by moving frame upward
+        .to(FRAME_SELECTOR, { y: "-100vh", duration: 0.8 }, ">");
+
+      return () => {
+        timeline.kill();
+      };
+    },
+    { scope: rootRef, dependencies: [hideAnimation] },
+  );
+
+  return hideAnimation ? (
+    <PageInViewContext.Provider value={true}>
+      <HomeContent />
+    </PageInViewContext.Provider>
+  ) : (
     <PageInViewContext.Provider value={animationComplete}>
-      <motion.div ref={scope}>
-        <motion.div
+      <div ref={rootRef}>
+        <div
           aria-busy={!animationComplete}
           className={cn(
             "content",
@@ -88,53 +85,51 @@ const HomePage: FC = () => {
               animationComplete ? "overflow-y-auto" : "overflow-y-hidden"
             }
           />
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           aria-hidden="true"
           className="fixed inset-0"
           style={{ pointerEvents: animationComplete ? "none" : "auto" }}
         >
-          <motion.div
+          <div
             className="frame relative"
-            initial={{
+            style={{
               width: "100vw",
               height: "100vh",
-              scale: 0.5,
-            }}
-            style={{
               transformOrigin: "center",
               willChange: animationComplete ? "auto" : "transform",
             }}
           >
-            <motion.img
-              className="h-full w-full object-cover"
-              src={flowy.src}
-            />
+            <img className="h-full w-full object-cover" src={flowy.src} />
 
-            <motion.div
+            <div
               className={cn(
                 "absolute top-0 left-0 size-full",
                 "flex flex-row justify-between items-center",
                 "[&_p]:text-7xl [&_p]:text-white font-semibold",
               )}
             >
-              <motion.p
+              <p
                 className="left"
-                style={{ willChange: animationComplete ? "auto" : "transform" }}
+                style={{
+                  willChange: animationComplete ? "auto" : "transform",
+                }}
               >
                 JONATHAN
-              </motion.p>
-              <motion.p
+              </p>
+              <p
                 className="right"
-                style={{ willChange: animationComplete ? "auto" : "transform" }}
+                style={{
+                  willChange: animationComplete ? "auto" : "transform",
+                }}
               >
                 CUI
-              </motion.p>
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </PageInViewContext.Provider>
   );
 };

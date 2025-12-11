@@ -10,8 +10,8 @@ import {
 } from "motion/react";
 import { useContext, useRef } from "react";
 
-import { homePageEasing } from "@/app/page";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
+import { appEasing } from "@/lib/animations";
 
 type MarginType = UseInViewOptions["margin"];
 
@@ -36,7 +36,8 @@ export function BlurFade({
   variant,
   duration = 1.6,
   delay = 0,
-  offset = "0.5em",
+  // offset = "0.5em",
+  offset = "2em",
   direction = "up",
   inViewMargin = "-50px",
   blur = "6px",
@@ -72,12 +73,7 @@ export function BlurFade({
         transition={{
           delay: 0.04 + delay,
           duration,
-          // type: "spring",
-          // stiffness: 72,
-          // damping: 12,
-          // restDelta: 0.001,
-          // ease: "easeOut",
-          ...homePageEasing,
+          ...appEasing,
         }}
         variants={combinedVariants}
         {...props}

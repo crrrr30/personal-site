@@ -12,35 +12,7 @@ import { BlurFade } from "@/components/BlurFade";
 import { Spacer } from "@/components/Spacer";
 import { cn } from "@/lib/utils";
 
-const TitleFadeIn: FC = () => {
-  const components: ReactNode[] = [
-    <h2 key={0}>A CURATED SELECTION</h2>,
-    <h2 key={1}>OF PERSONAL</h2>,
-    <h2 key={2}>
-      PROJECTS
-      <span key={0} className="inline-block w-24 h-1 bg-white" />
-    </h2>,
-  ];
-
-  return (
-    <>
-      {components.map((word, i) => (
-        <BlurFade
-          key={i}
-          className="inline-block [&_h2]:text-6xl font-medium "
-          delay={0.2 * (i + 1)}
-          direction="right"
-          inViewMargin="-50px 180px"
-          offset="8em"
-        >
-          {word}
-        </BlurFade>
-      ))}
-    </>
-  );
-};
-
-export const Projects: FC = () => {
+export const ProjectsSection: FC = () => {
   const bodyDiv = useBodyDivContext();
   const ref = useRef(null);
 
@@ -135,5 +107,33 @@ export const Projects: FC = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+const TitleFadeIn: FC = () => {
+  const components: ReactNode[] = [
+    <h2 key={0}>A CURATED SELECTION</h2>,
+    <h2 key={1}>OF PERSONAL</h2>,
+    <h2 key={2}>
+      PROJECTS
+      <span key={0} className="inline-block w-24 h-1 bg-white" />
+    </h2>,
+  ];
+
+  return (
+    <>
+      {components.map((word, i) => (
+        <BlurFade
+          key={i}
+          className="inline-block [&_h2]:text-6xl font-medium "
+          delay={0.2 * (i + 1)}
+          direction="right"
+          inViewMargin="-50px 180px"
+          offset="8em"
+        >
+          {word}
+        </BlurFade>
+      ))}
+    </>
   );
 };
