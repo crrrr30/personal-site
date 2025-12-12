@@ -49,10 +49,19 @@ body {
   }
 }
 
+/* responsive */
 .max-w-container {
   @apply max-w-[var(--size-container)];
 }
 
 .px-page {
   @apply px-4 md:px-16;
+}
+
+.right-page {
+  @apply right-4 md:right-16;
+}
+
+.translate-x-page {
+  @apply translate-x-4 md:translate-x-16;
 }

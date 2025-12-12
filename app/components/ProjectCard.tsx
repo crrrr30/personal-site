@@ -25,7 +25,7 @@ export const ProjectCard: FC<{
         <Image alt={alt} src={src} />
       </div>
 
-      <Spacer h={24} />
+      <Spacer h={1.5} />
 
       <div className="flex flex-row gap-4">
         <p className="whitespace-nowrap">
@@ -44,7 +44,7 @@ export const ProjectCard: FC<{
             </div>
           </div>
 
-          <Spacer h={4} />
+          <Spacer h={1} />
 
           {data.body}
         </div>

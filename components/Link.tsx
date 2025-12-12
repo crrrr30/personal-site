@@ -6,11 +6,17 @@ import "@/styles/link.css";
 
 const Link: React.FC<
   Parameters<typeof NextLink>[0] & {
-    variant?: "underlined" | "inverted";
+    variant?: "underlined" | "inverted" | "plain";
   }
 > = ({ children, className, variant = "underlined", ...prop }) => {
   return (
-    <NextLink className={cn(className, variant + "-link")} {...prop}>
+    <NextLink
+      className={cn(
+        className,
+        ["underlined", "inverted"].includes(variant) && variant + "-link",
+      )}
+      {...prop}
+    >
       {children}
     </NextLink>
   );

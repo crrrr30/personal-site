@@ -1,21 +1,20 @@
 "use client";
 
 import {
-  AnimatePresence,
   motion,
   useInView,
   type UseInViewOptions,
   type Variants,
   type MotionProps,
 } from "motion/react";
-import { useContext, useRef } from "react";
+import { type RefObject, useContext, useRef } from "react";
 
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import { appEasing } from "@/lib/animations";
 
 type MarginType = UseInViewOptions["margin"];
 
-interface BlurFadeProps extends MotionProps {
+export interface BlurFadeProps extends MotionProps {
   children: React.ReactNode;
   className?: string;
   variant?: {
@@ -28,6 +27,7 @@ interface BlurFadeProps extends MotionProps {
   direction?: "up" | "down" | "left" | "right";
   inViewMargin?: MarginType;
   blur?: string;
+  inViewRef?: RefObject<Element | null>;
 }
 
 export function BlurFade({
@@ -36,16 +36,19 @@ export function BlurFade({
   variant,
   duration = 1.6,
   delay = 0,
-  // offset = "0.5em",
-  offset = "2em",
+  offset = "8em",
   direction = "up",
   inViewMargin = "-50px",
-  blur = "6px",
+  blur = "0.375rem",
+  inViewRef,
   ...props
 }: BlurFadeProps) {
   const ref = useRef(null);
   const pageInView = useContext(PageInViewContext);
-  const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
+  const inViewResult = useInView(inViewRef ?? ref, {
+    once: true,
+    margin: inViewMargin,
+  });
   const isInView = pageInView && inViewResult;
   const defaultVariants: Variants = {
     hidden: {
@@ -63,23 +66,21 @@ export function BlurFade({
   const combinedVariants = variant || defaultVariants;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        ref={ref}
-        animate={isInView ? "visible" : "hidden"}
-        className={className}
-        exit="hidden"
-        initial="hidden"
-        transition={{
-          delay: 0.04 + delay,
-          duration,
-          ...appEasing,
-        }}
-        variants={combinedVariants}
-        {...props}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      ref={ref}
+      animate={isInView ? "visible" : "hidden"}
+      className={className}
+      exit="hidden"
+      initial="hidden"
+      transition={{
+        delay: 0.04 + delay,
+        duration,
+        ...appEasing,
+      }}
+      variants={combinedVariants}
+      {...props}
+    >
+      {children}
+    </motion.div>
   );
 }

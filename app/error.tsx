@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
-import SplitText from "@/components/SplitText";
+import { SplitText } from "@/components/SplitText";
 import { cn } from "@/lib/utils";
 
 export default function Error({
@@ -28,7 +28,7 @@ export default function Error({
 
         <div
           className={cn(
-            "px-16 pb-48",
+            "px-page pb-48",
             "grow",
             "flex flex-col justify-end items-start gap-32",
           )}

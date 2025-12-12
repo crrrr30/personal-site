@@ -29,12 +29,6 @@ const HomePage: FC = () => {
         return;
       }
 
-      gsap.set(FRAME_SELECTOR, {
-        scale: 0.5,
-        y: 0,
-        transformOrigin: "center",
-      });
-
       gsap.set([LEFT_SELECTOR, RIGHT_SELECTOR], { x: 0 });
 
       const timeline = gsap.timeline({
@@ -47,10 +41,23 @@ const HomePage: FC = () => {
       });
 
       timeline
+        // 0) unblur, restore y-offset, and show
+        .to(
+          FRAME_SELECTOR,
+          {
+            filter: "blur(0rem)",
+            translate: "0 0",
+            opacity: 1,
+            duration: 0.8,
+            ease: "expo",
+          },
+          0,
+        )
+        .add("shown", ">")
         // 1) zoom image frame outward and pull hero text apart
-        .to(FRAME_SELECTOR, { scale: 1 }, 0)
-        .to(LEFT_SELECTOR, { x: "1em" }, 0)
-        .to(RIGHT_SELECTOR, { x: "-1em" }, 0)
+        .to(FRAME_SELECTOR, { scale: 1 }, "shown")
+        .to(LEFT_SELECTOR, { x: "1rem" }, "shown")
+        .to(RIGHT_SELECTOR, { x: "-1rem" }, "shown")
         // 2) dock image to the top by moving frame upward
         .to(FRAME_SELECTOR, { y: "-100vh", duration: 0.8 }, ">");
 
@@ -92,6 +99,11 @@ const HomePage: FC = () => {
           <div
             className="frame relative"
             style={{
+              opacity: 0,
+              scale: 0.5,
+              filter: "blur(4rem)",
+              translate: "0 48rem",
+
               width: "100vw",
               height: "100vh",
               transformOrigin: "center",

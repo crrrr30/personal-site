@@ -38,7 +38,7 @@ export const BodyDiv: FC<BodyDivProps> = ({ className, children }) => {
       eventsTarget: wrapper, // listen for wheel/touch on that element
       smoothWheel: true,
       // syncTouch: true, -- disabled b/c of low performance for mobile devices
-      lerp: 0.2,
+      // lerp: 0.2,
       autoRaf: true,
     });
 

@@ -2,31 +2,53 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { type ReactNode, type FC, Fragment } from "react";
+import { type ReactNode, type FC, Fragment, useRef } from "react";
 
+import { useBlurFade } from "@/app/hooks/useBlurFade";
+import { useDivider } from "@/app/hooks/useDivider";
 import { useElementWidth } from "@/app/hooks/useElementWidth";
 import secondaryPortrait from "@/assets/secondary-portrait.png";
-import { Divider } from "@/components/Divider";
+import { type BlurFade as NativeBlurFade } from "@/components/BlurFade";
+import { type Divider as NativeDivider } from "@/components/Divider";
 import Link from "@/components/Link";
+import { Spacer } from "@/components/Spacer";
 import { appEasing } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
 export const AboutSection = () => {
+  const ref = useRef(null);
+  const BlurFade = useBlurFade(ref);
+  const Divider = useDivider(ref);
+
   return (
-    <section className="relative overflow-hidden" data-panel="about">
+    <section
+      ref={ref}
+      className={cn("relative overflow-hidden", "bg-gray-100")}
+      data-panel="about"
+    >
+      <Divider />
+
       <div
         className={cn(
-          "relative mx-auto flex flex-col gap-12",
-          "max-w-container py-24",
+          "mx-auto max-w-container px-page py-24",
+          "flex flex-row gap-16",
         )}
         data-panel-inner=""
       >
-        <h3 className="text-4xl text-brand font-medium">ABOUT SECTION</h3>
+        <div>
+          <BlurFade>
+            <h3 className="text-4xl text-brand font-medium">ABOUT SECTION</h3>
+          </BlurFade>
 
-        <AboutList />
+          <Spacer h={3} />
 
-        <div className={cn("w-[22.5rem]", "absolute bottom-0 right-0")}>
-          <Image alt="" src={secondaryPortrait} />
+          <AboutList BlurFade={BlurFade} Divider={Divider} />
+        </div>
+
+        <div className="w-[32rem]">
+          <BlurFade delay={0.6}>
+            <Image alt="" src={secondaryPortrait} />
+          </BlurFade>
         </div>
       </div>
     </section>
@@ -71,7 +93,11 @@ const aboutListData: Array<{ header: string; content: ReactNode }> = [
   },
 ];
 
-const AboutList: FC = () => {
+const AboutList: FC<{
+  className?: string;
+  BlurFade: typeof NativeBlurFade;
+  Divider: typeof NativeDivider;
+}> = ({ className, BlurFade, Divider }) => {
   const { ref, width } = useElementWidth<HTMLDivElement>();
 
   const transition = {
@@ -82,31 +108,39 @@ const AboutList: FC = () => {
   return (
     <div
       ref={ref}
-      className="grid auto-rows-fr grid-cols-[max-content,1fr] gap-x-8 gap-y-4"
+      className={cn(
+        "grid auto-rows-fr grid-cols-[max-content,1fr] gap-x-8 gap-y-6",
+        className,
+      )}
     >
       {aboutListData.map(({ header, content }, idx) => (
         <Fragment key={idx}>
-          <p className="font-medium">{header}</p>
+          <BlurFade delay={0.4 + 0.3 * idx}>
+            <p className="font-medium">{header}</p>
+          </BlurFade>
 
+          {/* TODO: disable hover effect until the blurfade has loaded */}
           <motion.div
             animate="initial"
             className="flex flex-col justify-between"
             initial="initial"
             whileHover="hovered"
           >
-            <motion.p
-              className="pb-4 "
-              transition={transition}
-              variants={{
-                initial: { color: "var(--color-gray-600)" },
-                hovered: { color: "black" },
-              }}
-            >
-              {content}
-            </motion.p>
+            <BlurFade delay={0.4 + 0.3 * idx + 0.1}>
+              <motion.p
+                className="pb-4 "
+                transition={transition}
+                variants={{
+                  initial: { color: "var(--color-gray-600)" },
+                  hovered: { color: "black" },
+                }}
+              >
+                {content}
+              </motion.p>
+            </BlurFade>
 
             <div className={cn("w-full h-[1px]", "relative")}>
-              <Divider from="end" />
+              <Divider delay={0.4 + 0.3 * idx + 0.2} from="end" />
 
               <div className="absolute top-0 right-0 bottom-0">
                 <motion.div

@@ -6,6 +6,7 @@ import {
   type Variants,
 } from "motion/react";
 import React, {
+  type RefObject,
   useCallback,
   useEffect,
   useMemo,
@@ -23,7 +24,7 @@ export interface SplitTextProps {
   delay?: number;
   splitDelay?: number;
   duration?: number;
-  ease?: string | Transition["ease"];
+  ease?: Transition["ease"];
   splitType?: "chars" | "words" | "lines" | "words, chars";
   from?: Target;
   to?: Target;
@@ -33,6 +34,7 @@ export interface SplitTextProps {
   textAlign?: React.CSSProperties["textAlign"];
   overflow?: React.CSSProperties["overflow"];
   onLetterAnimationComplete?: () => void;
+  inViewRef?: RefObject<HTMLElement | null>;
 }
 
 type AnimationLevel = "chars" | "words" | "lines";
@@ -148,60 +150,26 @@ const buildTokens = (
   return { tokens, animatedCount: animatedOrder };
 };
 
-const normalizeEase = (ease: SplitTextProps["ease"]): Transition["ease"] => {
-  if (!ease) {
-    return "easeOut";
-  }
+const defaultFromState: Target = { opacity: 0, y: 40 };
+const defaultToState: Target = { opacity: 1, y: 0 };
 
-  if (typeof ease === "function") {
-    return ease;
-  }
-
-  if (Array.isArray(ease)) {
-    return ease;
-  }
-
-  if (typeof ease !== "string") {
-    return ease;
-  }
-
-  const normalized = ease.toLowerCase();
-
-  if (normalized.includes("inout")) {
-    return "easeInOut";
-  }
-
-  if (normalized.includes("out")) {
-    return "easeOut";
-  }
-
-  if (normalized.includes("in")) {
-    return "easeIn";
-  }
-
-  if (normalized === "linear") {
-    return "linear";
-  }
-
-  return "easeOut";
-};
-
-const SplitText: React.FC<SplitTextProps> = ({
+export const SplitText: React.FC<SplitTextProps> = ({
   text,
   className = "",
   delay = 0,
   splitDelay = 20,
   duration = 0.5,
-  ease = "power3.out",
+  ease = "easeInOut",
   splitType = "chars",
-  from = { opacity: 0, y: 40 },
-  to = { opacity: 1, y: 0 },
+  from = defaultFromState,
+  to = defaultToState,
   threshold = 0.1,
   rootMargin = "-100px",
   textAlign = "center",
   overflow = "visible",
   tag = "p",
   onLetterAnimationComplete,
+  inViewRef,
 }) => {
   const ref = useRef<HTMLElement | null>(null);
   const animationCompletedRef = useRef(false);
@@ -236,7 +204,6 @@ const SplitText: React.FC<SplitTextProps> = ({
     [hiddenState, visibleState],
   );
 
-  const easing = useMemo(() => normalizeEase(ease), [ease]);
   const normalizedThreshold = Math.min(Math.max(threshold, 0), 1);
 
   const inViewOptions = useMemo<InViewOptions>(
@@ -248,7 +215,7 @@ const SplitText: React.FC<SplitTextProps> = ({
     [normalizedThreshold, rootMargin],
   );
 
-  const isInView = useInView(ref, inViewOptions);
+  const isInView = useInView(inViewRef ?? ref, inViewOptions);
 
   const assignRef = useCallback((node: HTMLElement | null) => {
     ref.current = node;
@@ -321,7 +288,7 @@ const SplitText: React.FC<SplitTextProps> = ({
           className={`split-${token.type}`}
           initial="hidden"
           style={itemStyle}
-          transition={{ duration, ease: easing, delay: delaySeconds }}
+          transition={{ duration, ease, delay: delaySeconds }}
           variants={variants}
           onAnimationComplete={handleTokenComplete}
         >
@@ -378,5 +345,3 @@ const SplitText: React.FC<SplitTextProps> = ({
 
   return renderTag();
 };
-
-export default SplitText;

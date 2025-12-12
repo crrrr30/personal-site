@@ -1,31 +1,42 @@
 "use client";
 
 import { motion } from "motion/react";
-import { type ReactNode, type FC, Fragment } from "react";
+import { type ReactNode, type FC, Fragment, useRef } from "react";
 
+import { useBlurFade } from "@/app/hooks/useBlurFade";
+import { useDivider } from "@/app/hooks/useDivider";
 import { useElementWidth } from "@/app/hooks/useElementWidth";
-import { Divider } from "@/components/Divider";
+import { type BlurFade as NativeBlurFade } from "@/components/BlurFade";
+import { type Divider as NativeDivider } from "@/components/Divider";
 import Link from "@/components/Link";
-import { SplitHeadline } from "@/components/SplittText";
 import { appEasing } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
 export const NotesSection = () => {
+  const ref = useRef(null);
+  const BlurFade = useBlurFade(ref);
+  const Divider = useDivider(ref);
+
   return (
     <section
-      className={cn("relative overflow-hidden")}
+      ref={ref}
+      className={cn("relative overflow-hidden", "bg-gray-100")}
       data-panel="notes"
       id="notes"
     >
       <div
-        className={cn("page-px py-24", "flex flex-col gap-12")}
+        className={cn(
+          "mx-auto max-w-container",
+          "px-page py-24",
+          "flex flex-col gap-12",
+        )}
         data-panel-inner=""
       >
-        <h3 className="text-4xl text-brand font-medium">NOTES SECTION</h3>
+        <BlurFade>
+          <h3 className="text-4xl text-brand font-medium">NOTES SECTION</h3>
+        </BlurFade>
 
-        <SplitHeadline />
-
-        <NotesList />
+        <NotesList BlurFade={BlurFade} Divider={Divider} />
       </div>
     </section>
   );
@@ -90,7 +101,10 @@ const notesData: Array<{ header: string; content: ReactNode; href: string }> = [
   },
 ];
 
-const NotesList: FC = () => {
+const NotesList: FC<{
+  BlurFade: typeof NativeBlurFade;
+  Divider: typeof NativeDivider;
+}> = ({ BlurFade, Divider }) => {
   const { ref, width } = useElementWidth<HTMLDivElement>();
 
   const transition = {
@@ -101,15 +115,17 @@ const NotesList: FC = () => {
   return (
     <div
       ref={ref}
-      className="grid auto-rows-fr grid-cols-[max-content,1fr] gap-x-8 gap-y-4"
+      className="grid auto-rows-fr grid-cols-[max-content,1fr] gap-x-8 gap-y-6"
     >
       {notesData.map(({ header, content, href }, idx) => (
         <Fragment key={idx}>
-          <div>
-            <Link className="font-medium" href={href}>
-              {header}
-            </Link>
-          </div>
+          <BlurFade delay={0.4 + 0.3 * idx}>
+            <div>
+              <Link className="font-medium" href={href}>
+                {header}
+              </Link>
+            </div>
+          </BlurFade>
 
           <motion.div
             animate="initial"
@@ -117,22 +133,24 @@ const NotesList: FC = () => {
             initial="initial"
             whileHover="hovered"
           >
-            <motion.p
-              className="pb-4 "
-              style={{
-                fontSize: "var(--size-font)",
-              }}
-              transition={transition}
-              variants={{
-                initial: { color: "var(--color-gray-600)" },
-                hovered: { color: "black" },
-              }}
-            >
-              {content}
-            </motion.p>
+            <BlurFade delay={0.4 + 0.3 * idx + 0.1}>
+              <motion.p
+                className="pb-4 "
+                style={{
+                  fontSize: "var(--size-font)",
+                }}
+                transition={transition}
+                variants={{
+                  initial: { color: "var(--color-gray-600)" },
+                  hovered: { color: "black" },
+                }}
+              >
+                {content}
+              </motion.p>
+            </BlurFade>
 
             <div className={cn("w-full h-[1px]", "relative")}>
-              <Divider from="end" />
+              <Divider delay={0.4 + 0.3 * idx + 0.2} from="end" />
 
               <div className="absolute top-0 right-0 bottom-0">
                 <motion.div

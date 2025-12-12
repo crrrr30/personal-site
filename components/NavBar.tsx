@@ -1,49 +1,83 @@
 "use client";
 
-import { type MouseEvent, useCallback } from "react";
+import {
+  Navbar,
+  NavbarContent,
+  NavbarBrand,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+} from "@heroui/navbar";
+import { type FC } from "react";
 
-import { useScrollToSection } from "@/app/hooks/useScrollToSection";
 import { BlurFade } from "@/components/BlurFade";
 import Link from "@/components/Link";
+import { cn } from "@/lib/utils";
 
-const links: { text: string; sectionId: string }[] = [
-  { text: "PROJECTS", sectionId: "projects" },
-  { text: "NOTES", sectionId: "notes" },
+const links: { text: string; href: string }[] = [
+  { text: "Home", href: "/" },
+  { text: "Blogs", href: "https://sites.psu.edu/jonathancui" },
+  { text: "Résumé", href: "/assets/files/Resume.pdf" },
+  { text: "Portfolio", href: "https://sway.office.com/qHuaPGQEKeIjePnJ" },
 ];
 
 export function NavBar() {
-  const scrollToSection = useScrollToSection();
-
-  const handleNavigate = useCallback(
-    (event: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
-      const handled = scrollToSection(sectionId);
-
-      if (handled) {
-        event.preventDefault();
-      }
-    },
-    [scrollToSection],
-  );
-
   return (
-    <nav className="flex flex-row justify-between px-16 py-8">
-      <BlurFade offset="2em">
-        <p>BEHIND THE SCENES</p>
-      </BlurFade>
+    <>
+      <nav className="hidden md:flex flex-row justify-between px-page py-8">
+        <BlurFade offset="2em">
+          <p>BEHIND THE SCREEN</p>
+        </BlurFade>
 
-      <span className="flex flex-row gap-32">
-        {links.map(({ text, sectionId }, index) => (
-          <BlurFade key={index} delay={0.2 * (index + 1)}>
-            <Link
-              href={`#${sectionId}`}
-              variant="inverted"
-              onClick={(event) => handleNavigate(event, sectionId)}
-            >
-              {text}
-            </Link>
-          </BlurFade>
-        ))}
-      </span>
-    </nav>
+        <span className="flex flex-row gap-32">
+          {links.map(({ text, href }, index) => (
+            <BlurFade key={index} delay={0.2 * (index + 1)}>
+              <Link href={href} variant="inverted">
+                {text}
+              </Link>
+            </BlurFade>
+          ))}
+        </span>
+      </nav>
+      <SmallNavBar className="flex md:hidden" />
+    </>
   );
 }
+
+const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
+  return (
+    <Navbar
+      className={cn("bg-gray-100", className)}
+      height="6rem"
+      position="static"
+    >
+      <BlurFade className="w-full">
+        <NavbarContent className="flex justify-between">
+          <NavbarBrand>
+            <Link
+              className="serif tracking-normal text-lg"
+              href="/"
+              variant="plain"
+            >
+              BEHIND THE SCREEN
+            </Link>
+          </NavbarBrand>
+
+          <NavbarMenuToggle className="size-6" />
+        </NavbarContent>
+      </BlurFade>
+
+      <NavbarMenu className="bg-transparent">
+        {links.map(({ text, href }, index) => (
+          <BlurFade key={index} delay={0.2 * (index + 1)}>
+            <NavbarMenuItem className="py-2 list-none text-base">
+              <Link href={href} variant="inverted">
+                {text}
+              </Link>
+            </NavbarMenuItem>
+          </BlurFade>
+        ))}
+      </NavbarMenu>
+    </Navbar>
+  );
+};

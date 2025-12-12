@@ -4,7 +4,7 @@ import {
   type Variants,
   type UseInViewOptions,
 } from "motion/react";
-import { useContext, useRef } from "react";
+import { type RefObject, useContext, useRef } from "react";
 
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import { appEasing } from "@/lib/animations";
@@ -19,6 +19,7 @@ export function Divider({
   from = "center",
   duration = 2,
   inViewMargin = "-50px",
+  inViewRef,
 }: {
   className?: string;
   delay?: number;
@@ -26,10 +27,14 @@ export function Divider({
   from?: "center" | "start" | "end";
   duration?: number;
   inViewMargin?: MarginType;
+  inViewRef?: RefObject<HTMLElement | null>;
 }) {
   const ref = useRef(null);
   const pageInView = useContext(PageInViewContext);
-  const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
+  const inViewResult = useInView(inViewRef ?? ref, {
+    once: true,
+    margin: inViewMargin,
+  });
   const isInView = pageInView && inViewResult;
 
   const variants: Variants = {

@@ -17,6 +17,10 @@
   --breakpoint-sm: 30rem;
   --breakpoint-md: 48rem;
   --breakpoint-lg: 62rem;
+
+  --spacing-*: initial;
+  --spacing-container: var(--size-container);
+  --spacing-page: var(--size-page);
 }
 
 body {
@@ -48,6 +52,12 @@ li {
   width: 100vw;
   margin-left: calc(50% - 50vw); /* pull outward from centered container */
   margin-right: calc(50% - 50vw);
+}
+
+.pin-spacer,
+.pin-spacer > [data-panel] {
+  width: 100% !important;
+  max-width: none !important;
 }
 
 @layer base {

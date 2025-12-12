@@ -62,6 +62,12 @@ export const usePanels = ({
         const timeline = timelinesByPanel.get(panel);
 
         if (timeline) {
+          const trigger = timeline.scrollTrigger;
+
+          if (trigger) {
+            trigger.kill(true);
+          }
+
           timeline.kill();
           timelinesByPanel.delete(panel);
         }
@@ -127,9 +133,9 @@ export const usePanels = ({
             .fromTo(
               panel,
               { scale: 1, opacity: 1 },
-              { scale: minScale, opacity: minOpacity, duration: 0.9 },
+              { scale: minScale, opacity: minOpacity, duration: 0.6 },
             )
-            .to(panel, { opacity: 0, duration: 0.1 });
+            .to(panel, { opacity: 0, duration: 0.4 });
 
           timelinesByPanel.set(panel, timeline);
         });
@@ -141,11 +147,17 @@ export const usePanels = ({
         buildTimelines();
       };
 
+      const handleResize = () => {
+        ScrollTrigger.refresh();
+      };
+
       ScrollTrigger.addEventListener("refreshInit", handleRefresh);
+      window.addEventListener("resize", handleResize);
       ScrollTrigger.refresh();
 
       return () => {
         ScrollTrigger.removeEventListener("refreshInit", handleRefresh);
+        window.removeEventListener("resize", handleResize);
         timelinesByPanel.forEach((_, panel) => cleanupPanel(panel));
       };
     },

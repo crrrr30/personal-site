@@ -28,22 +28,19 @@ export const ProjectsSection: FC = () => {
 
   return (
     <section
-      className={cn(
-        "relative overflow-hidden",
-        "full-bleed px-6 bg-brand text-white",
-      )}
+      className={cn("relative overflow-hidden", "bg-brand text-white")}
       data-panel="projects"
       id="projects"
     >
       <div
-        className={cn("mx-auto flex flex-col", "max-w-[1280px] p-16")}
+        className="mx-auto max-w-container px-page py-24"
         data-panel-inner=""
       >
         <div className="flex flex-col">
           <TitleFadeIn />
         </div>
 
-        <Spacer h={48} />
+        <Spacer h={6} />
 
         <div
           ref={ref}
@@ -136,7 +133,6 @@ const TitleFadeIn: FC = () => {
           delay={0.2 * (i + 1)}
           direction="right"
           inViewMargin="-50px 180px"
-          offset="8em"
         >
           {word}
         </BlurFade>
