@@ -35,7 +35,7 @@ export default function Error({
         >
           <div
             className={cn(
-              "[&_*]:text-[144px] [&_*]:tracking-tighter [&_*]:leading-[0.75em]",
+              "md:[&_*]:text-[144px] [&_*]:tracking-tighter [&_*]:leading-[0.75em]",
               "flex flex-col items-start",
             )}
           >

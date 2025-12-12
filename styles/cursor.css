@@ -1,9 +1,31 @@
-body:has(a:hover) .cursor,
-body:has(button:hover) .cursor,
-body:has([data-cursor]:hover) .cursor {
-  width: 3em;
-  height: 3em;
-  background-color: rgba(255, 76, 36, 0.3);
+.cursor {
+  z-index: 9999;
+  position: fixed;
+  inset: 0% auto auto 0%;
+  pointer-events: none;
+}
+
+.cursor div {
+  @apply animate-spin;
+
+  backdrop-filter: invert(1);
+  background: rgba(255, 255, 255, 0.001);
+  width: 1em;
+  height: 1em;
+  transition:
+    transform 0.375s cubic-bezier(0.625, 0.05, 0, 1),
+    border-radius 0.375s cubic-bezier(0.625, 0.05, 0, 1),
+    height 0.375s cubic-bezier(0.625, 0.05, 0, 1),
+    width 0.375s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+body:has(a:hover) .cursor div,
+body:has(button:hover) .cursor div,
+body:has([data-cursor]:hover) .cursor div {
+  width: 3rem;
+  height: 3rem;
+  transform: translateX(0rem), translateY(0rem);
+  border-radius: 1.5rem;
 }
 
 @media (hover: none) and (pointer: coarse) {

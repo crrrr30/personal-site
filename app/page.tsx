@@ -10,7 +10,7 @@ import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import flowy from "@/assets/flowy.png";
 import { cn } from "@/lib/utils";
 
-const hideAnimation = false;
+const disableAnimation = false;
 const FRAME_SELECTOR = ".frame";
 const LEFT_SELECTOR = ".left";
 const RIGHT_SELECTOR = ".right";
@@ -19,11 +19,11 @@ gsap.registerPlugin(useGSAP);
 
 const HomePage: FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
-  const [animationComplete, setAnimationComplete] = useState(hideAnimation);
+  const [animationComplete, setAnimationComplete] = useState(disableAnimation);
 
   useGSAP(
     () => {
-      if (hideAnimation) {
+      if (disableAnimation) {
         setAnimationComplete(true);
 
         return;
@@ -65,10 +65,10 @@ const HomePage: FC = () => {
         timeline.kill();
       };
     },
-    { scope: rootRef, dependencies: [hideAnimation] },
+    { scope: rootRef, dependencies: [disableAnimation] },
   );
 
-  return hideAnimation ? (
+  return disableAnimation ? (
     <PageInViewContext.Provider value={true}>
       <HomeContent />
     </PageInViewContext.Provider>

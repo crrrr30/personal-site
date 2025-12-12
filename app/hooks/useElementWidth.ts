@@ -1,11 +1,15 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { type RefObject, useLayoutEffect, useRef, useState } from "react";
 
-export function useElementWidth<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
+export function useElementWidth<T extends HTMLElement>(
+  ref?: RefObject<T | null>,
+) {
+  const newRef = useRef<T | null>(null);
+  const finalRef = ref ?? newRef;
+
   const [width, setWidth] = useState<number | null>(null);
 
   useLayoutEffect(() => {
-    const elem = ref.current;
+    const elem = finalRef.current;
 
     if (!elem) return;
 
@@ -37,5 +41,5 @@ export function useElementWidth<T extends HTMLElement>() {
     };
   }, []);
 
-  return { ref, width };
+  return { finalRef, width };
 }

@@ -4,48 +4,52 @@ import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { type ReactNode, type FC, useRef } from "react";
 
 import { ProjectCard } from "@/app/components/ProjectCard";
+import { useBlurFade } from "@/app/hooks/useBlurFade";
+import { useIsMd } from "@/app/hooks/useMediaQuery";
 import { useBodyDivContext } from "@/app/providers/BodyDivContext";
 import proj1 from "@/assets/proj1.png";
 import proj2 from "@/assets/proj2.jpg";
 import proj3 from "@/assets/proj3.png";
-import { BlurFade } from "@/components/BlurFade";
+import { type BlurFade as NativeBlurFade } from "@/components/BlurFade";
 import { Spacer } from "@/components/Spacer";
 import { cn } from "@/lib/utils";
 
 export const ProjectsSection: FC = () => {
   const bodyDiv = useBodyDivContext();
   const ref = useRef(null);
+  const BlurFade = useBlurFade(ref);
+
+  const isMd = useIsMd();
 
   const { scrollYProgress } = useScroll({
     container: bodyDiv,
     offset: ["center end", "center start"],
   });
-  const prog = useSpring(scrollYProgress, {
+  const springProg = useSpring(scrollYProgress, {
     stiffness: 72,
     damping: 18,
     restDelta: 0.001,
   });
+  const prog = useTransform(springProg, [0, 1], isMd ? [0, 1] : [0, 0]);
 
   return (
     <section
+      ref={ref}
       className={cn("relative overflow-hidden", "bg-brand text-white")}
       data-panel="projects"
       id="projects"
     >
       <div
-        className="mx-auto max-w-container px-page py-24"
+        className="mx-auto max-w-container px-page py-12 md:py-24"
         data-panel-inner=""
       >
         <div className="flex flex-col">
-          <TitleFadeIn />
+          <TitleFadeIn BlurFade={BlurFade} />
         </div>
 
         <Spacer h={6} />
 
-        <div
-          ref={ref}
-          className="flex flex-row justify-between items-start gap-8 pb-24"
-        >
+        <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-8 pb-24">
           <ProjectCard
             alt=""
             animDelay={0.2}
@@ -85,6 +89,7 @@ export const ProjectsSection: FC = () => {
               src={proj2}
             />
           </motion.div>
+
           <motion.div
             className="flex-1"
             style={{
@@ -114,7 +119,7 @@ export const ProjectsSection: FC = () => {
   );
 };
 
-const TitleFadeIn: FC = () => {
+const TitleFadeIn: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
   const components: ReactNode[] = [
     <h2 key={0}>A CURATED SELECTION</h2>,
     <h2 key={1}>OF PERSONAL</h2>,

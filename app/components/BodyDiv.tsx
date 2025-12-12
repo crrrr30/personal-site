@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { ReactLenis } from "lenis/react";
 import { useEffect, useRef, useState, type FC, type ReactNode } from "react";
 
 import { usePanels } from "@/app/hooks/usePanels";
@@ -38,7 +39,7 @@ export const BodyDiv: FC<BodyDivProps> = ({ className, children }) => {
       eventsTarget: wrapper, // listen for wheel/touch on that element
       smoothWheel: true,
       // syncTouch: true, -- disabled b/c of low performance for mobile devices
-      // lerp: 0.2,
+      lerp: 0.1,
       autoRaf: true,
     });
 
@@ -126,6 +127,12 @@ export const BodyDiv: FC<BodyDivProps> = ({ className, children }) => {
       className={cn("h-screen w-screen overflow-hidden", className)}
       id="body-content"
     >
+      <ReactLenis />
+
+      <div className="cursor">
+        <div />
+      </div>
+
       <BodyDivContext.Provider value={wrapperRef}>
         <div ref={contentRef}>{children}</div>
       </BodyDivContext.Provider>

@@ -24,22 +24,23 @@ export const FooterSection: FC = () => {
         )}
         data-panel-inner=""
       >
-        <div className="px-page py-48">
+        <div className="pt-32">
           <SplitText
-            className="[&_*]:text-9xl [&_*]:font-light [&_*]:tracking-tighter"
-            duration={1}
+            className="[&_*]:text-6xl md:[&_*]:text-9xl [&_*]:font-light [&_*]:tracking-tighter"
             inViewRef={ref}
             splitType="words"
             text="“Entities must not be multiplied beyond necessity.”"
             textAlign="left"
           />
 
-          <Spacer h={8} />
+          <Spacer h={6} />
 
-          <p className="text-2xl">— William of Ockham</p>
+          <BlurFade delay={0.5}>
+            <p className="text-2xl">— William of Ockham</p>
+          </BlurFade>
         </div>
 
-        <BlurFade>
+        <BlurFade delay={1.0}>
           <SVGName color="#f6f6f620" />
         </BlurFade>
       </div>
