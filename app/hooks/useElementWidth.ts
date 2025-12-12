@@ -1,9 +1,7 @@
 import { type RefObject, useLayoutEffect, useRef, useState } from "react";
 
-export function useElementWidth<T extends HTMLElement>(
-  ref?: RefObject<T | null>,
-) {
-  const newRef = useRef<T | null>(null);
+export function useElementWidth<T extends HTMLElement>(ref?: RefObject<T>) {
+  const newRef = useRef<T>(null);
   const finalRef = ref ?? newRef;
 
   const [width, setWidth] = useState<number | null>(null);
@@ -39,7 +37,7 @@ export function useElementWidth<T extends HTMLElement>(
       if (observer) observer.disconnect();
       else window.removeEventListener("resize", measure);
     };
-  }, []);
+  }, [finalRef]);
 
-  return { finalRef, width };
+  return { ref: finalRef, width };
 }
