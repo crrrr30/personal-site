@@ -2,24 +2,40 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import Image from "next/image";
-import { useRef, useState, type FC } from "react";
+import { useCallback, useRef, useState, type FC } from "react";
 
 import { HomeContent } from "@/app/components/HomeContent";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
-import flowy from "@/assets/flowy.png";
+import { Willem, WILLEM_SELECTORS, createWillemTimeline } from "@/app/willem";
 import { cn } from "@/lib/utils";
 
 const disableAnimation = false;
-const FRAME_SELECTOR = ".frame";
-const LEFT_SELECTOR = ".left";
-const RIGHT_SELECTOR = ".right";
+const FRAME_OFFSET_EPSILON = 0.5;
 
 gsap.registerPlugin(useGSAP);
 
 const HomePage: FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const loaderRef = useRef<HTMLElement | null>(null);
+  const frameOffsetLockedRef = useRef(false);
+  const [frameOffset, setFrameOffset] = useState<number | null>(null);
   const [animationComplete, setAnimationComplete] = useState(disableAnimation);
+
+  const handleFrameOffsetChange = useCallback((offset: number) => {
+    if (frameOffsetLockedRef.current) return;
+
+    setFrameOffset((prev) => {
+      if (prev == null) {
+        return offset;
+      }
+
+      if (Math.abs(prev - offset) < FRAME_OFFSET_EPSILON) {
+        return prev;
+      }
+
+      return offset;
+    });
+  }, []);
 
   useGSAP(
     () => {
@@ -29,43 +45,41 @@ const HomePage: FC = () => {
         return;
       }
 
-      gsap.set([LEFT_SELECTOR, RIGHT_SELECTOR], { x: 0 });
+      if (frameOffset == null) {
+        return;
+      }
 
-      const timeline = gsap.timeline({
-        delay: 0.3,
-        defaults: {
-          duration: 1.1,
-          ease: "expo.inOut",
-        },
-        onComplete: () => setAnimationComplete(true),
+      const loader = loaderRef.current;
+
+      if (!loader) return;
+
+      frameOffsetLockedRef.current = true;
+
+      const timeline = createWillemTimeline(loader, {
+        unlockOnComplete: false,
+        frameOffset,
       });
 
-      timeline
-        // 0) unblur, restore y-offset, and show
-        .to(
-          FRAME_SELECTOR,
-          {
-            filter: "blur(0rem)",
-            translate: "0 0",
-            opacity: 1,
-            duration: 0.8,
-            ease: "expo",
-          },
-          0,
-        )
-        .add("shown", ">")
-        // 1) zoom image frame outward and pull hero text apart
-        .to(FRAME_SELECTOR, { scale: 1 }, "shown")
-        .to(LEFT_SELECTOR, { x: "1rem" }, "shown")
-        .to(RIGHT_SELECTOR, { x: "-1rem" }, "shown")
-        // 2) dock image to the top by moving frame upward
-        .to(FRAME_SELECTOR, { y: "-100vh", duration: 0.8 }, ">");
+      const backgroundFrame = loader.querySelector(WILLEM_SELECTORS.frame);
+
+      if (backgroundFrame) {
+        timeline.to(backgroundFrame, {
+          y: "-100vh",
+          duration: 0.8,
+          ease: "expo.inOut",
+        });
+      }
+
+      timeline.call(() => {
+        loader.classList.remove("is--loading");
+        setAnimationComplete(true);
+      });
 
       return () => {
         timeline.kill();
       };
     },
-    { scope: rootRef, dependencies: [disableAnimation] },
+    { scope: rootRef, dependencies: [disableAnimation, frameOffset] },
   );
 
   return disableAnimation ? (
@@ -93,57 +107,16 @@ const HomePage: FC = () => {
 
         <div
           aria-hidden="true"
-          className="fixed inset-0"
-          style={{ pointerEvents: animationComplete ? "none" : "auto" }}
+          className={cn(
+            "fixed inset-0 z-20 transition-opacity duration-700",
+            animationComplete ? "pointer-events-none opacity-0" : "opacity-100",
+          )}
         >
-          <div
-            className="frame relative"
-            style={{
-              opacity: 0,
-              scale: 0.5,
-              filter: "blur(4rem)",
-              translate: "0 48rem",
-
-              width: "100vw",
-              height: "100vh",
-              transformOrigin: "center",
-              willChange: animationComplete ? "auto" : "transform",
-            }}
-          >
-            <Image
-              fill
-              priority
-              alt=""
-              className="h-full w-full object-cover"
-              sizes="100vw"
-              src={flowy}
-            />
-
-            <div
-              className={cn(
-                "absolute top-0 left-0 size-full",
-                "flex flex-row justify-between items-center",
-                "[&_p]:text-7xl [&_p]:text-white font-semibold",
-              )}
-            >
-              <p
-                className="left"
-                style={{
-                  willChange: animationComplete ? "auto" : "transform",
-                }}
-              >
-                JONATHAN
-              </p>
-              <p
-                className="right"
-                style={{
-                  willChange: animationComplete ? "auto" : "transform",
-                }}
-              >
-                CUI
-              </p>
-            </div>
-          </div>
+          <Willem
+            ref={loaderRef}
+            autoPlay={false}
+            onFrameOffsetChange={handleFrameOffsetChange}
+          />
         </div>
       </div>
     </PageInViewContext.Provider>

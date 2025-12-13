@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { memo, type FC } from "react";
 
 import { AboutSection } from "@/app/components/AboutSection";
 import { BodyDiv } from "@/app/components/BodyDiv";
@@ -9,7 +9,7 @@ import { NotesSection } from "@/app/components/NotesSection";
 import { ProjectsSection } from "@/app/components/ProjectsSection";
 import { NavBar } from "@/components/NavBar";
 
-export const HomeContent: FC<{ className?: string }> = ({ className }) => {
+const HomeContentComponent: FC<{ className?: string }> = ({ className }) => {
   return (
     <BodyDiv className={className}>
       <NavBar />
@@ -28,3 +28,7 @@ export const HomeContent: FC<{ className?: string }> = ({ className }) => {
     </BodyDiv>
   );
 };
+
+export const HomeContent = memo(HomeContentComponent);
+
+HomeContent.displayName = "HomeContent";
