@@ -1,6 +1,8 @@
 import { type RefObject, useLayoutEffect, useRef, useState } from "react";
 
-export function useElementSize<T extends HTMLElement>(ref?: RefObject<T>) {
+export function useElementSize<T extends HTMLElement>(
+  ref?: RefObject<T | null>,
+) {
   const newRef = useRef<T>(null);
   const finalRef = ref ?? newRef;
 
