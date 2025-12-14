@@ -1,5 +1,6 @@
 import { useRef, type FC } from "react";
 
+import { PanelSection } from "@/app/components/PanelSection";
 import { useBlurFade } from "@/app/hooks/useBlurFade";
 import { Spacer } from "@/components/Spacer";
 import { SplitText } from "@/components/SplitText";
@@ -11,10 +12,9 @@ export const FooterSection: FC = () => {
   const BlurFade = useBlurFade(ref);
 
   return (
-    <section
+    <PanelSection
       ref={ref}
       className="bg-[#232323] text-[#f6f6f6] relative overflow-hidden"
-      data-panel="footer"
     >
       <div
         className={cn(
@@ -22,7 +22,6 @@ export const FooterSection: FC = () => {
           "px-page",
           "flex flex-col justify-between h-screen",
         )}
-        data-panel-inner=""
       >
         <div className="pt-32">
           <SplitText
@@ -44,6 +43,6 @@ export const FooterSection: FC = () => {
           <SVGName color="#f6f6f620" />
         </BlurFade>
       </div>
-    </section>
+    </PanelSection>
   );
 };

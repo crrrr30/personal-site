@@ -5,7 +5,7 @@ import { type FC, Fragment, type ReactNode } from "react";
 
 import { useBlurFade } from "@/app/hooks/useBlurFade";
 import { useDivider } from "@/app/hooks/useDivider";
-import { useElementWidth } from "@/app/hooks/useElementWidth";
+import { useElementSize } from "@/app/hooks/useElementWidth";
 import { appEasing } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,7 @@ export const AnimatedList: FC<{
   listData: Array<{ header: ReactNode; content: ReactNode }>;
   className?: string;
 }> = ({ baseDelay = 0, listData, className }) => {
-  const { ref, width } = useElementWidth<HTMLDivElement>();
+  const { ref, width } = useElementSize<HTMLDivElement>();
   const BlurFade = useBlurFade(ref);
   const Divider = useDivider(ref);
 

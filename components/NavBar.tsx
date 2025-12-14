@@ -11,15 +11,15 @@ import {
 import { type FC } from "react";
 
 import { BlurFade } from "@/components/BlurFade";
-import { Divider } from "@/components/Divider";
 import Link from "@/components/Link";
+import { blogsLink, portfolioLink, resumeLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
-const links: { text: string; href: string }[] = [
+export const links: { text: string; href: string }[] = [
   { text: "Home", href: "/" },
-  { text: "Blogs", href: "https://sites.psu.edu/jonathancui" },
-  { text: "Résumé", href: "/assets/files/Resume.pdf" },
-  { text: "Portfolio", href: "https://sway.office.com/qHuaPGQEKeIjePnJ" },
+  { text: "Blogs", href: blogsLink },
+  { text: "Résumé", href: resumeLink },
+  { text: "Portfolio", href: portfolioLink },
 ];
 
 export function NavBar() {
@@ -47,42 +47,38 @@ export function NavBar() {
 
 const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
   return (
-    <>
-      <Navbar
-        className={cn("bg-gray-100", className)}
-        height="6rem"
-        position="static"
-      >
-        <BlurFade className="w-full">
-          <NavbarContent className="flex justify-between">
-            <NavbarBrand>
-              <Link
-                className="serif tracking-normal text-lg"
-                href="/"
-                variant="plain"
-              >
-                BEHIND THE SCREEN
+    <Navbar
+      className={cn("bg-gray-100", className)}
+      height="6rem"
+      position="static"
+    >
+      <BlurFade className="w-full">
+        <NavbarContent className="flex justify-between">
+          <NavbarBrand>
+            <Link
+              className="serif tracking-normal text-lg"
+              href="/"
+              variant="plain"
+            >
+              BEHIND THE SCREEN
+            </Link>
+          </NavbarBrand>
+
+          <NavbarMenuToggle className="size-6" />
+        </NavbarContent>
+      </BlurFade>
+
+      <NavbarMenu className="bg-transparent">
+        {links.map(({ text, href }, index) => (
+          <BlurFade key={index} delay={0.2 * (index + 1)}>
+            <NavbarMenuItem className="py-2 list-none text-base">
+              <Link href={href} variant="inverted">
+                {text}
               </Link>
-            </NavbarBrand>
-
-            <NavbarMenuToggle className="size-6" />
-          </NavbarContent>
-        </BlurFade>
-
-        <NavbarMenu className="bg-transparent">
-          {links.map(({ text, href }, index) => (
-            <BlurFade key={index} delay={0.2 * (index + 1)}>
-              <NavbarMenuItem className="py-2 list-none text-base">
-                <Link href={href} variant="inverted">
-                  {text}
-                </Link>
-              </NavbarMenuItem>
-            </BlurFade>
-          ))}
-        </NavbarMenu>
-      </Navbar>
-
-      <Divider />
-    </>
+            </NavbarMenuItem>
+          </BlurFade>
+        ))}
+      </NavbarMenu>
+    </Navbar>
   );
 };

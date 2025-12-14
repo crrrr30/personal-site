@@ -1,8 +1,8 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Image from "next/image";
 import {
   forwardRef,
   memo,
@@ -13,8 +13,13 @@ import {
   type HTMLAttributes,
 } from "react";
 
-import { useElementWidth } from "@/app/hooks/useElementWidth";
+import { useElementSize } from "@/app/hooks/useElementWidth";
+import flowy from "@/assets/flowy.png";
+import mainShot from "@/assets/main-shot.png";
+import secondaryPortrait from "@/assets/secondary-portrait-alt.png";
+import sideShot from "@/assets/side-shot.png";
 import { SplitText, type SplitTextProps } from "@/components/SplitText";
+import { portfolioLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 import "./willem.css";
@@ -28,18 +33,14 @@ const HERO_TEXT = {
 };
 
 const WILLEM_IMAGES = {
-  base: "https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724b0_minimalist-architecture-1.avif",
-  extras: [
-    "https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724bc_minimalist-architecture-2.avif",
-    "https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724cf_minimalist-architecture-4.avif",
-    "https://cdn.prod.website-files.com/6915bbf51d482439010ee790/6915bc3ac9fe346a924724c5_minimalist-architecture-3.avif",
-  ],
+  base: flowy,
+  extras: [mainShot, secondaryPortrait, sideShot],
 };
 
 const NAV_LINKS = [
   { href: "#projects", label: "Projects," },
+  { href: portfolioLink, label: "Portfolio" },
   { href: "#notes", label: "Notes," },
-  { href: "#contact", label: "Contact" },
 ];
 
 const CTA_LINK = {
@@ -113,6 +114,7 @@ export const createWillemTimeline = (
     },
   });
 
+  // show letters
   runIfPresent(elements.loadingLetters, (targets) =>
     timeline.from(targets, {
       yPercent: 100,
@@ -121,6 +123,7 @@ export const createWillemTimeline = (
     }),
   );
 
+  // show img width
   runIfPresent(elements.box, (targets) =>
     timeline.fromTo(
       targets,
@@ -194,6 +197,8 @@ export const createWillemTimeline = (
   );
 
   if (elements.growingImage.length) {
+    timeline.addLabel("startGrowImage", "< 1.25");
+
     timeline.to(
       elements.growingImage,
       {
@@ -201,7 +206,17 @@ export const createWillemTimeline = (
         height: "100dvh",
         duration: 2,
       },
-      "< 1.25",
+      "startGrowImage",
+    );
+    runIfPresent(elements.loadingLetters, (targets) =>
+      timeline.to(
+        targets,
+        {
+          opacity: 0,
+          duration: 1.25,
+        },
+        "startGrowImage",
+      ),
     );
 
     if (frameOffset) {
@@ -291,8 +306,8 @@ export const Willem = forwardRef<HTMLElement | null, WillemProps>(
     forwardedRef,
   ) {
     const localRef = useRef<HTMLElement | null>(null);
-    const startMeasure = useElementWidth<HTMLDivElement>();
-    const endMeasure = useElementWidth<HTMLDivElement>();
+    const startMeasure = useElementSize<HTMLDivElement>();
+    const endMeasure = useElementSize<HTMLDivElement>();
     const emittedOffsetRef = useRef<number | null>(null);
 
     const hasValidWidths = useMemo(() => {
@@ -377,8 +392,8 @@ export const Willem = forwardRef<HTMLElement | null, WillemProps>(
                 <div className="willem__growing-image">
                   <div className="willem__growing-image-wrap">
                     {WILLEM_IMAGES.extras.map((src, index) => (
-                      <img
-                        key={src}
+                      <Image
+                        key={index}
                         alt=""
                         className={cn(
                           "willem__cover-image-extra",
@@ -388,7 +403,7 @@ export const Willem = forwardRef<HTMLElement | null, WillemProps>(
                         src={src}
                       />
                     ))}
-                    <img
+                    <Image
                       alt=""
                       className="willem__cover-image"
                       loading="lazy"

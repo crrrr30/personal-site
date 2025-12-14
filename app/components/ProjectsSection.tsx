@@ -3,6 +3,7 @@
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { type ReactNode, type FC, useRef } from "react";
 
+import { PanelSection } from "@/app/components/PanelSection";
 import { ProjectCard } from "@/app/components/ProjectCard";
 import { useBlurFade } from "@/app/hooks/useBlurFade";
 import { useIsMd } from "@/app/hooks/useMediaQuery";
@@ -33,16 +34,12 @@ export const ProjectsSection: FC = () => {
   const prog = useTransform(springProg, [0, 1], isMd ? [0, 1] : [0, 0]);
 
   return (
-    <section
+    <PanelSection
       ref={ref}
       className={cn("relative overflow-hidden", "bg-brand text-white")}
-      data-panel="projects"
       id="projects"
     >
-      <div
-        className="mx-auto max-w-container px-page py-12 md:py-24"
-        data-panel-inner=""
-      >
+      <div className="mx-auto max-w-container px-page py-12 md:py-24">
         <div className="flex flex-col">
           <TitleFadeIn BlurFade={BlurFade} />
         </div>
@@ -115,7 +112,7 @@ export const ProjectsSection: FC = () => {
           </motion.div>
         </div>
       </div>
-    </section>
+    </PanelSection>
   );
 };
 

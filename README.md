@@ -1,3 +1,12 @@
+# TODOs
+
+- [ ] fix button
+- [ ] redo loading page anim (?) with motion
+- [ ] fix md behavior
+- [ ] check content
+- [ ] consider shuffling anim
+
+
 # Next.js & HeroUI Template
 
 This is a template for creating applications using Next.js 14 (app directory) and HeroUI (v2).

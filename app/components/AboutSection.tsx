@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { type ReactNode, useRef } from "react";
 
+import { PanelSection } from "@/app/components/PanelSection";
 import { useBlurFade } from "@/app/hooks/useBlurFade";
 import { useDivider } from "@/app/hooks/useDivider";
 import secondaryPortrait from "@/assets/secondary-portrait.png";
@@ -17,10 +18,9 @@ export const AboutSection = () => {
   const Divider = useDivider(ref);
 
   return (
-    <section
+    <PanelSection
       ref={ref}
       className={cn("relative overflow-hidden", "bg-gray-100")}
-      data-panel="about"
     >
       <Divider />
 
@@ -29,7 +29,6 @@ export const AboutSection = () => {
           "mx-auto max-w-container px-page py-12 md:py-24",
           "flex flex-row gap-16",
         )}
-        data-panel-inner=""
       >
         <div>
           <BlurFade>
@@ -53,7 +52,7 @@ export const AboutSection = () => {
           </BlurFade>
         </div>
       </div>
-    </section>
+    </PanelSection>
   );
 };
 

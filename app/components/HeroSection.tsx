@@ -4,6 +4,7 @@ import { IconServer } from "justd-icons";
 import Image from "next/image";
 import { useRef, type FC } from "react";
 
+import { PanelSection } from "@/app/components/PanelSection";
 import { useBlurFade } from "@/app/hooks/useBlurFade";
 import { useDivider } from "@/app/hooks/useDivider";
 import { useScrollToSection } from "@/app/hooks/useScrollToSection";
@@ -21,8 +22,6 @@ const halfSectionHeight = "h-[27rem]";
 const topHalfSectionHeight = "top-[27rem]";
 
 export const HeroSection: FC = () => {
-  const scrollToSection = useScrollToSection();
-
   const ref = useRef(null);
   const BlurFade = useBlurFade(ref);
   const Divider = useDivider(ref);
@@ -30,18 +29,14 @@ export const HeroSection: FC = () => {
   return (
     <div ref={ref}>
       {/* desktop */}
-      <section
+      <PanelSection
         className={cn(
           "hidden md:block",
           "relative overflow-hidden",
           sectionHeight,
         )}
-        data-panel="hero"
       >
-        <div
-          className="relative mx-auto max-w-container h-full flex flex-col"
-          data-panel-inner=""
-        >
+        <div className="relative mx-auto max-w-container h-full flex flex-col">
           <Divider className="full-bleed" />
 
           <Divider
@@ -101,7 +96,7 @@ export const HeroSection: FC = () => {
             </BlurFade>
           </div>
         </div>
-      </section>
+      </PanelSection>
 
       <MobileSections />
     </div>
@@ -124,64 +119,58 @@ const MobileHeroSection: FC = () => {
   const Divider = useDivider(ref);
 
   return (
-    <>
-      <section
-        ref={ref}
-        className={cn("block md:hidden", "overflow-hidden")}
-        data-panel="hero-1"
-      >
-        <Divider />
+    <PanelSection
+      ref={ref}
+      className={cn("block md:hidden", "overflow-hidden")}
+    >
+      <Divider />
 
+      <div className="mx-auto max-w-container h-full flex flex-col">
         <div
-          className="mx-auto max-w-container h-full flex flex-col"
-          data-panel-inner=""
+          className={cn(
+            "flex flex-col",
+            "py-24",
+            "full-bleed",
+            "relative",
+            "text-brand [&_*]:text-9xl [&_*]:leading-none font-bold",
+          )}
         >
-          <div
-            className={cn(
-              "flex flex-col",
-              "py-24",
-              "full-bleed",
-              "relative",
-              "text-brand [&_*]:text-9xl [&_*]:leading-none font-bold",
-            )}
-          >
-            <Divider
-              vertical
-              className={"absolute top-0 bottom-0 left-[33%]"}
-              delay={0.5}
-              from="start"
-            />
-            <Divider
-              vertical
-              className={"absolute top-0 bottom-0 right-[33%]"}
-              delay={0.8}
-              from="start"
-            />
+          <Divider
+            vertical
+            className={"absolute top-0 bottom-0 left-[33%]"}
+            delay={0.5}
+            from="start"
+          />
+          <Divider
+            vertical
+            className={"absolute top-0 bottom-0 right-[33%]"}
+            delay={0.8}
+            from="start"
+          />
 
-            <BlurFade delay={0.4}>
-              <h1 className="z-10">JONA-</h1>
-            </BlurFade>
-            <BlurFade delay={0.6}>
-              <div className="flex flex-row justify-end z-10">
-                <h1>THAN</h1>
-              </div>
-            </BlurFade>
-          </div>
-
-          {/* portrait overlay on main hero text */}
-          <div className="absolute top-[2.5rem] left-[7rem]">
-            <BlurFade
-              className="w-[7.5rem]"
-              delay={1}
-              direction="down"
-              offset="6em"
-            >
-              <Image alt={""} src={sideShot} />
-            </BlurFade>
-          </div>
+          <BlurFade delay={0.4}>
+            <h1 className="z-10">JONA-</h1>
+          </BlurFade>
+          <BlurFade delay={0.6}>
+            <div className="flex flex-row justify-end z-10">
+              <h1>THAN</h1>
+            </div>
+          </BlurFade>
         </div>
-      </section>
-    </>
+
+        {/* portrait overlay on main hero text */}
+        <div className="absolute top-[2.5rem] left-[7rem]">
+          <BlurFade
+            className="w-[7.5rem]"
+            delay={1}
+            direction="down"
+            offset="6em"
+          >
+            <Image alt={""} src={sideShot} />
+          </BlurFade>
+        </div>
+      </div>
+    </PanelSection>
   );
 };
 
@@ -231,15 +220,11 @@ const MobileDescriptionSection: FC = () => {
   const Divider = useDivider(ref);
 
   return (
-    <section
-      ref={ref}
-      className={cn("block md:hidden", "bg-gray-100")}
-      data-panel="hero-2"
-    >
-      <div className="relative overflow-hidden" data-panel-inner="">
+    <PanelSection ref={ref} className={cn("block md:hidden", "bg-gray-100")}>
+      <div className="relative overflow-hidden">
         <MobileDescription BlurFade={BlurFade} Divider={Divider} />
       </div>
-    </section>
+    </PanelSection>
   );
 };
 
@@ -247,7 +232,7 @@ const MobileFlowy: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
   const scrollToSection = useScrollToSection();
 
   return (
-    <div className="pb-16 md:pb-0" data-panel-inner="">
+    <div className="pb-16 md:pb-0">
       <BlurFade delay={0.6}>
         <Image alt="" src={flowy} />
       </BlurFade>
@@ -287,8 +272,10 @@ const MobileFlowySection: FC = () => {
   const BlurFade = useBlurFade(ref);
 
   return (
-    <section ref={ref} className="block md:hidden" data-panel="hero-3">
-      <MobileFlowy BlurFade={BlurFade} />
-    </section>
+    <PanelSection ref={ref} className="block md:hidden">
+      <div>
+        <MobileFlowy BlurFade={BlurFade} />
+      </div>
+    </PanelSection>
   );
 };

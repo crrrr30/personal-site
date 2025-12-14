@@ -2,6 +2,7 @@
 
 import { type ReactNode, type FC, useRef } from "react";
 
+import { PanelSection } from "@/app/components/PanelSection";
 import { useBlurFade } from "@/app/hooks/useBlurFade";
 import { AnimatedList } from "@/components/AnimatedList";
 import Link from "@/components/Link";
@@ -12,19 +13,17 @@ export const NotesSection = () => {
   const BlurFade = useBlurFade(ref);
 
   return (
-    <section
+    <PanelSection
       ref={ref}
       className={cn("relative overflow-hidden", "bg-gray-100")}
-      data-panel="notes"
       id="notes"
     >
       <div
         className={cn(
           "mx-auto max-w-container",
-          "px-page py-24",
+          "px-page py-12 md:py-24",
           "flex flex-col gap-12",
         )}
-        data-panel-inner=""
       >
         <BlurFade>
           <h3 className="text-4xl text-brand font-medium">NOTES SECTION</h3>
@@ -32,7 +31,7 @@ export const NotesSection = () => {
 
         <NotesList />
       </div>
-    </section>
+    </PanelSection>
   );
 };
 

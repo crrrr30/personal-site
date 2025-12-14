@@ -1,16 +1,14 @@
 import "@/styles/globals.css";
 
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 
 import { Providers } from "@/app/providers";
 
 export const metadata: Metadata = {
   title: "Jonathan Cui",
   description:
-    "I am a fourth-year student of Computer Science at UC San Diego, minoring in Mathematics.",
+    "I am a fourth-year student at UC San Diego, double majoring in Computer Science (CS26) and Mathematics (MA29) with a 3.97 GPA.",
 };
-
-export const viewport: Viewport = { themeColor: "bg-gray-100" };
 
 export default function RootLayout({
   children,
@@ -28,12 +26,12 @@ export default function RootLayout({
         <link href="https://use.typekit.net/sob2svi.css" rel="stylesheet" />
 
         {/* katex */}
-        <link
+        {/* <link
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
           integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
           rel="stylesheet"
-        />
+        /> */}
 
         <title>Jonathan Cui</title>
       </head>
