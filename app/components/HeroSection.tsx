@@ -56,7 +56,9 @@ export const HeroSection: FC = () => {
               )}
             >
               <h1
-                className={cn("text-brand text-[12rem] leading-none font-bold")}
+                className={cn(
+                  "text-brand text-[8rem] lg:text-[12rem] leading-none font-bold",
+                )}
               >
                 JONATHAN
               </h1>
@@ -77,7 +79,7 @@ export const HeroSection: FC = () => {
           {/* bottom-right section */}
           <div
             className={cn(
-              "absolute bottom-16 right-page w-[25rem]",
+              "absolute bottom-16 right-page w-[18rem] lg:w-[25rem]",
               "flex flex-col",
             )}
           >
@@ -85,7 +87,7 @@ export const HeroSection: FC = () => {
           </div>
 
           {/* portrait overlay on main hero text */}
-          <div className="absolute top-[3.5rem] left-[24rem]">
+          <div className="absolute top-[4rem] left-[16rem] lg:left-[24rem]">
             <BlurFade
               className="w-[7.5rem]"
               delay={1}
@@ -242,7 +244,7 @@ const MobileFlowy: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
       <BlurFade className="px-page md:px-0" delay={0.8}>
         <div className="flex flex-row justify-between items-start">
           <Image alt="" height={32} src={barcode} />
-          <p className="leading-none">
+          <p className="hidden lg:block leading-none">
             <b>2025</b>
           </p>
         </div>

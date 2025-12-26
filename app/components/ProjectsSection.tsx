@@ -48,6 +48,8 @@ const PROJECT_CARDS: readonly ProjectCardConfig[] = [
           conditions and dietary restrictions.
         </p>
       ),
+      projectLink: "https://tastemate.pro",
+      gitlabLink: "https://gitlab.ovh.joncui.sh/crrrr30/tastemate-monorepo",
     },
     src: proj1,
   },
@@ -64,6 +66,8 @@ const PROJECT_CARDS: readonly ProjectCardConfig[] = [
           Curry–Howard, written in Rust.
         </p>
       ),
+      projectLink: "https://math.joncui.sh",
+      gitlabLink: "https://gitlab.ovh.joncui.sh/crrrr30/math",
     },
     src: proj2,
     translateRange: [0, 96],
@@ -82,6 +86,8 @@ const PROJECT_CARDS: readonly ProjectCardConfig[] = [
           agents.
         </p>
       ),
+      projectLink: null,
+      gitlabLink: null,
     },
     src: proj3,
     translateRange: [0, -96],

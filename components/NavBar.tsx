@@ -30,7 +30,7 @@ export function NavBar() {
           <p>BEHIND THE SCREEN</p>
         </BlurFade>
 
-        <span className="flex flex-row gap-32">
+        <span className="flex flex-row md:gap-16 lg:gap-32">
           {links.map(({ text, href }, index) => (
             <BlurFade key={href} delay={0.2 * (index + 1)}>
               <Link href={href} variant="inverted">

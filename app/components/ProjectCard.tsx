@@ -10,6 +10,8 @@ type CardData = {
   index: number;
   title: string;
   body: React.ReactNode;
+  projectLink: string | null;
+  gitlabLink: string | null;
 };
 
 export const ProjectCard: FC<{
@@ -18,7 +20,13 @@ export const ProjectCard: FC<{
   alt: string;
   data: CardData;
   className?: string;
-}> = ({ animDelay, src, alt, data, className }) => (
+}> = ({
+  animDelay,
+  src,
+  alt,
+  data: { index, title, body, projectLink, gitlabLink },
+  className,
+}) => (
   <BlurFade className={className} delay={animDelay}>
     <div className="w-full">
       <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">
@@ -29,24 +37,28 @@ export const ProjectCard: FC<{
 
       <div className="flex flex-row gap-4">
         <p className="whitespace-nowrap">
-          [ {String(data.index).padStart(2, "0")} ]
+          [ {String(index).padStart(2, "0")} ]
         </p>
         <div className="grow">
           <div className="flex flex-row gap-4 items-center">
-            <h3 className="font-medium">{data.title}</h3>
+            <h3 className="font-medium">{title}</h3>
             <div className="flex flex-row gap-2">
-              <Button variant="plain">
-                <IconLink />
-              </Button>
-              <Button variant="plain">
-                <IconBrandGitlab />
-              </Button>
+              {projectLink != null ? (
+                <Button href={projectLink} variant="plain">
+                  <IconLink />
+                </Button>
+              ) : null}
+              {gitlabLink != null ? (
+                <Button href={gitlabLink} variant="plain">
+                  <IconBrandGitlab />
+                </Button>
+              ) : null}
             </div>
           </div>
 
           <Spacer h={1} />
 
-          {data.body}
+          {body}
         </div>
       </div>
     </div>
