@@ -3,6 +3,7 @@
   position: fixed;
   inset: 0% auto auto 0%;
   pointer-events: none;
+  opacity: 0;
 }
 
 .cursor div {

@@ -12,7 +12,6 @@ import {
   useCallback,
   useMemo,
   useRef,
-  type MutableRefObject,
   type PropsWithChildren,
 } from "react";
 
@@ -58,7 +57,7 @@ const PanelSectionBase = forwardRef<
 
     const { scrollYProgress } = useScroll({
       container: bodyDiv,
-      target: wrapperRef as MutableRefObject<HTMLElement | null>,
+      target: wrapperRef,
       offset: ["start start", "end start"],
     });
 
@@ -106,6 +105,13 @@ const PanelSectionBase = forwardRef<
       [0, 0.85, 1],
       [1, minOpacity, 0],
     );
+    const blur = useTransform(
+      clampedProgress,
+      // [0, 0.85, 1],
+      // ["blur(0px)", "blur(0px)", "blur(12px)"],
+      [0, 1],
+      ["blur(0px)", "blur(4px)"],
+    );
 
     const assignWrapperRef = useCallback(
       (node: HTMLElement | null) => {
@@ -128,6 +134,7 @@ const PanelSectionBase = forwardRef<
           ...style,
           scale: disableScale ? undefined : scale,
           opacity: disableFade ? undefined : opacity,
+          filter: blur,
         }}
         {...rest}
       >

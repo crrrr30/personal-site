@@ -50,7 +50,7 @@ li {
 
 .full-bleed {
   width: 100vw;
-  margin-left: calc(50% - 50vw);
+  margin-left: calc(50% - 50vw); /* pull outward from centered container */
   margin-right: calc(50% - 50vw);
 }
 

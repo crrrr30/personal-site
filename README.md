@@ -1,5 +1,6 @@
 # TODOs
 
+- [ ] fix links
 - [ ] fix button
 - [ ] redo loading page anim (?) with motion
 - [ ] fix md behavior

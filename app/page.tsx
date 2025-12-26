@@ -5,8 +5,9 @@ import gsap from "gsap";
 import { useCallback, useRef, useState, type FC } from "react";
 
 import { HomeContent } from "@/app/components/HomeContent";
+import { AppLoadingPage } from "@/app/loadingpage";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
-import { Willem, WILLEM_SELECTORS, createWillemTimeline } from "@/app/willem";
+import { WILLEM_SELECTORS, createWillemTimeline } from "@/app/willem";
 import { cn } from "@/lib/utils";
 
 const disableAnimation = false;
@@ -84,6 +85,7 @@ const HomePage: FC = () => {
 
   return disableAnimation ? (
     <PageInViewContext.Provider value={true}>
+      <AppLoadingPage />
       <HomeContent />
     </PageInViewContext.Provider>
   ) : (
@@ -112,14 +114,43 @@ const HomePage: FC = () => {
             animationComplete ? "pointer-events-none opacity-0" : "opacity-100",
           )}
         >
-          <Willem
-            ref={loaderRef}
-            autoPlay={false}
-            onFrameOffsetChange={handleFrameOffsetChange}
-          />
+          <AppLoadingPage />
         </div>
       </div>
     </PageInViewContext.Provider>
+    // <PageInViewContext.Provider value={animationComplete}>
+    //   <div ref={rootRef}>
+    //     <div
+    //       aria-busy={!animationComplete}
+    //       className={cn(
+    //         "content",
+    //         animationComplete
+    //           ? "opacity-100 pointer-events-auto"
+    //           : "opacity-0 pointer-events-none",
+    //       )}
+    //     >
+    //       <HomeContent
+    //         className={
+    //           animationComplete ? "overflow-y-auto" : "overflow-y-hidden"
+    //         }
+    //       />
+    //     </div>
+
+    //     <div
+    //       aria-hidden="true"
+    //       className={cn(
+    //         "fixed inset-0 z-20 transition-opacity duration-700",
+    //         animationComplete ? "pointer-events-none opacity-0" : "opacity-100",
+    //       )}
+    //     >
+    //       <Willem
+    //         ref={loaderRef}
+    //         autoPlay={false}
+    //         onFrameOffsetChange={handleFrameOffsetChange}
+    //       />
+    //     </div>
+    //   </div>
+    // </PageInViewContext.Provider>
   );
 };
 

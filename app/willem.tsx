@@ -116,11 +116,24 @@ export const createWillemTimeline = (
 
   // show letters
   runIfPresent(elements.loadingLetters, (targets) =>
-    timeline.from(targets, {
-      yPercent: 100,
-      stagger: 0.025,
-      duration: 1.25,
+    timeline.to(targets, {
+      opacity: 1,
+      // stagger: 0,
+      duration: 5,
     }),
+  );
+  runIfPresent(elements.loadingLetters, (targets) =>
+    timeline.fromTo(
+      targets,
+      {
+        y: "-8rem",
+      },
+      {
+        y: 0,
+        stagger: 0.025,
+        duration: 1.25,
+      },
+    ),
   );
 
   // show img width
@@ -132,7 +145,7 @@ export const createWillemTimeline = (
       },
       {
         width: "1em",
-        duration: 1.25,
+        duration: 1000.25,
       },
       "< 1.25",
     ),

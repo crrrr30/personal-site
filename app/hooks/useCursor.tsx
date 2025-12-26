@@ -9,17 +9,17 @@ gsap.registerPlugin(useGSAP);
 export const useCursor = () => {
   const cursorRef = useRef(null);
 
-  const Cursor = useMemo(() => {
-    const CursorComponent = () => (
-      <div ref={cursorRef} className="cursor">
-        <div />
-      </div>
-    );
-
-    CursorComponent.displayName = "Cursor";
-
-    return CursorComponent;
-  }, [cursorRef]);
+  const Cursor = useMemo(
+    () =>
+      function Cursor() {
+        return (
+          <div ref={cursorRef} className="cursor">
+            <div />
+          </div>
+        );
+      },
+    [cursorRef],
+  );
 
   useGSAP(
     () => {
@@ -31,6 +31,10 @@ export const useCursor = () => {
 
       gsap.set(cursor, { xPercent: -50, yPercent: -50 });
 
+      const opacityTo = gsap.quickTo(cursor, "opacity", {
+        duration: 0.6,
+        ease: "power3",
+      });
       const xTo = gsap.quickTo(cursor, "x", {
         duration: 0.6,
         ease: "power3",
@@ -40,7 +44,13 @@ export const useCursor = () => {
         ease: "power3",
       });
 
+      const firstMovement = false;
+
       const handleMouseMove = (event: MouseEvent) => {
+        if (firstMovement) {
+          opacityTo(1);
+        }
+
         xTo(event.clientX);
         yTo(event.clientY);
       };
