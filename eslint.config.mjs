@@ -175,6 +175,8 @@ export default defineConfig([globalIgnores([
       reservedFirst: true,
     }],
 
+    "react/jsx-curly-brace-presence": ["warn", { "props": "never", "children": "never", "propElementValues": "always" }],
+
     "padding-line-between-statements": ["warn", {
       blankLine: "always",
       prev: "*",

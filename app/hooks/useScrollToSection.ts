@@ -3,9 +3,11 @@
 import { useCallback } from "react";
 
 import { useBodyDivContext } from "@/app/providers/BodyDivContext";
+import { useSmoothScrollContext } from "@/app/providers/SmoothScrollContext";
 
 export function useScrollToSection() {
   const bodyDivRef = useBodyDivContext();
+  const lenisRef = useSmoothScrollContext();
 
   return useCallback(
     (sectionId: string) => {
@@ -14,6 +16,14 @@ export function useScrollToSection() {
       const target = document.getElementById(sectionId);
 
       if (!target) return false;
+
+      const lenisInstance = lenisRef?.current;
+
+      if (lenisInstance) {
+        lenisInstance.scrollTo(target);
+
+        return true;
+      }
 
       const container = bodyDivRef?.current;
 
@@ -33,6 +43,6 @@ export function useScrollToSection() {
 
       return true;
     },
-    [bodyDivRef],
+    [bodyDivRef, lenisRef],
   );
 }

@@ -20,7 +20,7 @@ export const links: { text: string; href: string }[] = [
   { text: "Blogs", href: blogsLink },
   { text: "Résumé", href: resumeLink },
   { text: "Portfolio", href: portfolioLink },
-];
+] as const;
 
 export function NavBar() {
   return (
@@ -32,7 +32,7 @@ export function NavBar() {
 
         <span className="flex flex-row gap-32">
           {links.map(({ text, href }, index) => (
-            <BlurFade key={index} delay={0.2 * (index + 1)}>
+            <BlurFade key={href} delay={0.2 * (index + 1)}>
               <Link href={href} variant="inverted">
                 {text}
               </Link>
@@ -70,7 +70,7 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
 
       <NavbarMenu className="bg-transparent">
         {links.map(({ text, href }, index) => (
-          <BlurFade key={index} delay={0.2 * (index + 1)}>
+          <BlurFade key={href} delay={0.2 * (index + 1)}>
             <NavbarMenuItem className="py-2 list-none text-base">
               <Link href={href} variant="inverted">
                 {text}

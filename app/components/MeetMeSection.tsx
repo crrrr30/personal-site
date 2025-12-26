@@ -42,14 +42,14 @@ export const MeetMeSection = () => {
               )}
             >
               <div className="text-white md:text-black flex justify-center md:ml-auto size-6">
-                <BlurFade delay={0.4}>
+                <BlurFade delay={0.2}>
                   <p>02</p>
                 </BlurFade>
               </div>
 
               <span className="flex flex-col">
                 {["MEET", "JONATHAN", "CUI"].map((word, i) => (
-                  <BlurFade key={i} delay={0.6 + 0.2 * i}>
+                  <BlurFade key={i} delay={0.3 + 0.1 * i}>
                     <p
                       className={cn(
                         "text-white md:text-brand",
@@ -64,7 +64,7 @@ export const MeetMeSection = () => {
               </span>
 
               <div className="hidden md:block absolute bottom-0 right-0 w-24 h-24">
-                <BlurFade delay={0.6}>
+                <BlurFade delay={0.3}>
                   <Image
                     alt=""
                     className="h-full w-full object-cover"

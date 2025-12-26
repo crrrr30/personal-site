@@ -38,7 +38,7 @@ export const AboutSection = () => {
           <Spacer h={3} />
 
           <AnimatedList
-            baseDelay={0.4}
+            baseDelay={0.2}
             listData={aboutListData.map(({ header, content }) => ({
               header: <p className="font-medium">{header}</p>,
               content: <p>{content}</p>,
@@ -47,7 +47,7 @@ export const AboutSection = () => {
         </div>
 
         <div className="hidden md:block w-[32rem]">
-          <BlurFade delay={0.6}>
+          <BlurFade delay={0.4}>
             <Image alt="" src={secondaryPortrait} />
           </BlurFade>
         </div>

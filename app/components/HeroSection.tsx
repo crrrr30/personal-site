@@ -12,7 +12,7 @@ import barcode from "@/assets/barcode.png";
 import flowy from "@/assets/flowy.png";
 import sideShot from "@/assets/side-shot.png";
 import { type BlurFade as NativeBlurFade } from "@/components/BlurFade";
-import { Button } from "@/components/Button";
+import { TextButton } from "@/components/Button";
 import { type Divider as NativeDivider } from "@/components/Divider";
 import { Spacer } from "@/components/Spacer";
 import { cn } from "@/lib/utils";
@@ -41,7 +41,7 @@ export const HeroSection: FC = () => {
 
           <Divider
             vertical
-            className={"absolute left-[50%] h-[200%]"}
+            className="absolute left-[50%] h-[200%]"
             delay={0.5}
             from="start"
           />
@@ -92,7 +92,7 @@ export const HeroSection: FC = () => {
               direction="down"
               offset="6em"
             >
-              <Image alt={""} src={sideShot} />
+              <Image alt="" src={sideShot} />
             </BlurFade>
           </div>
         </div>
@@ -137,13 +137,13 @@ const MobileHeroSection: FC = () => {
         >
           <Divider
             vertical
-            className={"absolute top-0 bottom-0 left-[33%]"}
+            className="absolute top-0 bottom-0 left-[33%]"
             delay={0.5}
             from="start"
           />
           <Divider
             vertical
-            className={"absolute top-0 bottom-0 right-[33%]"}
+            className="absolute top-0 bottom-0 right-[33%]"
             delay={0.8}
             from="start"
           />
@@ -166,7 +166,7 @@ const MobileHeroSection: FC = () => {
             direction="down"
             offset="6em"
           >
-            <Image alt={""} src={sideShot} />
+            <Image alt="" src={sideShot} />
           </BlurFade>
         </div>
       </div>
@@ -241,7 +241,7 @@ const MobileFlowy: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
 
       <BlurFade className="px-page md:px-0" delay={0.8}>
         <div className="flex flex-row justify-between items-start">
-          <Image alt={""} height={32} src={barcode} />
+          <Image alt="" height={32} src={barcode} />
           <p className="leading-none">
             <b>2025</b>
           </p>
@@ -257,10 +257,15 @@ const MobileFlowy: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
         <Spacer h={1.5} />
 
         <div className="flex flex-row gap-8">
-          <Button onPress={() => scrollToSection("projects")}>PROJECTS</Button>
-          <Button variant="outline" onPress={() => scrollToSection("notes")}>
-            NOTES
-          </Button>
+          <TextButton
+            text="PROJECTS"
+            onPress={() => scrollToSection("projects")}
+          />
+          <TextButton
+            text="NOTES"
+            variant="outline"
+            onPress={() => scrollToSection("notes")}
+          />
         </div>
       </BlurFade>
     </div>

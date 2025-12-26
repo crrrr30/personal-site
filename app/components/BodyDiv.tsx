@@ -1,12 +1,12 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
 import { useRef, type FC, type ReactNode } from "react";
 
 import { useCoarse } from "@/app/hooks/useCoarse";
 import { useCursor } from "@/app/hooks/useCursor";
 import { useSmoothScroll } from "@/app/hooks/useSmoothScroll";
 import { BodyDivContext } from "@/app/providers/BodyDivContext";
+import { SmoothScrollContext } from "@/app/providers/SmoothScrollContext";
 import { cn } from "@/lib/utils";
 
 export type BodyDivProps = {
@@ -20,7 +20,7 @@ export const BodyDiv: FC<BodyDivProps> = ({ className, children }) => {
 
   const disableSmoothScroll = useCoarse() ?? true;
 
-  useSmoothScroll({
+  const lenisRef = useSmoothScroll({
     bodyDiv,
     contentRef,
     disable: disableSmoothScroll,
@@ -29,22 +29,22 @@ export const BodyDiv: FC<BodyDivProps> = ({ className, children }) => {
   const { Cursor } = useCursor();
 
   return (
-    <div
-      ref={bodyDiv}
-      className={cn(
-        "h-screen w-screen overflow-x-hidden",
-        disableSmoothScroll ? "overflow-y-auto" : "overflow-y-hidden",
-        className,
-      )}
-      id="body-content"
-    >
-      <ReactLenis />
+    <SmoothScrollContext.Provider value={lenisRef}>
+      <div
+        ref={bodyDiv}
+        className={cn(
+          "h-screen w-screen overflow-x-hidden",
+          disableSmoothScroll ? "overflow-y-auto" : "overflow-y-hidden",
+          className,
+        )}
+        id="body-content"
+      >
+        <Cursor />
 
-      <Cursor />
-
-      <BodyDivContext.Provider value={bodyDiv}>
-        <div ref={contentRef}>{children}</div>
-      </BodyDivContext.Provider>
-    </div>
+        <BodyDivContext.Provider value={bodyDiv}>
+          <div ref={contentRef}>{children}</div>
+        </BodyDivContext.Provider>
+      </div>
+    </SmoothScrollContext.Provider>
   );
 };

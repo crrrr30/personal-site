@@ -19,7 +19,7 @@ export const AnimatedList: FC<{
   const Divider = useDivider(ref);
 
   const transition = {
-    duration: 1,
+    duration: 0.6,
     ...appEasing,
   };
 
@@ -33,7 +33,7 @@ export const AnimatedList: FC<{
     >
       {listData.map(({ header, content }, idx) => (
         <Fragment key={idx}>
-          <BlurFade delay={baseDelay + 0.3 * idx}>{header}</BlurFade>
+          <BlurFade delay={baseDelay + 0.15 * idx}>{header}</BlurFade>
 
           {/* TODO: disable hover effect until the blurfade has loaded */}
           <motion.div
@@ -42,7 +42,7 @@ export const AnimatedList: FC<{
             initial="initial"
             whileHover="hovered"
           >
-            <BlurFade delay={baseDelay + 0.3 * idx + 0.1}>
+            <BlurFade delay={baseDelay + 0.15 * idx + 0.05}>
               <motion.div
                 className="pb-4"
                 transition={transition}
@@ -56,7 +56,7 @@ export const AnimatedList: FC<{
             </BlurFade>
 
             <div className={cn("w-full h-[1px]", "relative")}>
-              <Divider delay={baseDelay + 0.3 * idx + 0.2} from="end" />
+              <Divider delay={baseDelay + 0.15 * idx + 0.1} from="end" />
 
               <div className="absolute top-0 right-0 bottom-0">
                 <motion.div

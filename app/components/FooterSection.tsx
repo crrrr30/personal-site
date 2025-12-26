@@ -34,12 +34,12 @@ export const FooterSection: FC = () => {
 
           <Spacer h={6} />
 
-          <BlurFade delay={0.5}>
+          <BlurFade delay={0.25}>
             <p className="text-2xl">— William of Ockham</p>
           </BlurFade>
         </div>
 
-        <BlurFade delay={1.0}>
+        <BlurFade delay={0.5}>
           <SVGName color="#f6f6f620" />
         </BlurFade>
       </div>

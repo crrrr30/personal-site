@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
-import { Button } from "@/components/Button";
+import { TextButton } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
 import { SplitText } from "@/components/SplitText";
 import { cn } from "@/lib/utils";
@@ -44,7 +44,7 @@ export default function Error({
             <SplitText delay={0.3} text="wrong" />
           </div>
 
-          <Button onPress={() => reset()}>Try again</Button>
+          <TextButton text="Try again" onPress={() => reset()} />
         </div>
       </div>
     </PageInViewContext.Provider>

@@ -1,68 +1,65 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { useMemo, useRef } from "react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { useEffect, useMemo, useRef, type FC } from "react";
 
-gsap.registerPlugin(useGSAP);
+const springConfig = { stiffness: 230, damping: 28, mass: 0.45 } as const;
 
 export const useCursor = () => {
-  const cursorRef = useRef(null);
+  const hasShownCursorRef = useRef(false);
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const rawOpacity = useMotionValue(0);
 
-  const Cursor = useMemo(
-    () =>
-      function Cursor() {
-        return (
-          <div ref={cursorRef} className="cursor">
-            <div />
-          </div>
-        );
-      },
-    [cursorRef],
-  );
+  const x = useSpring(rawX, springConfig);
+  const y = useSpring(rawY, springConfig);
+  const opacity = useSpring(rawOpacity, { stiffness: 160, damping: 25 });
 
-  useGSAP(
-    () => {
-      if (typeof window === "undefined") return;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-      const cursor = cursorRef.current;
+    const handleMouseMove = (event: MouseEvent) => {
+      rawX.set(event.clientX);
+      rawY.set(event.clientY);
 
-      if (!cursor) return;
+      if (!hasShownCursorRef.current) {
+        hasShownCursorRef.current = true;
+        rawOpacity.set(1);
+      }
+    };
 
-      gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+    const handleMouseLeave = () => {
+      rawOpacity.set(0);
+      hasShownCursorRef.current = false;
+    };
 
-      const opacityTo = gsap.quickTo(cursor, "opacity", {
-        duration: 0.6,
-        ease: "power3",
-      });
-      const xTo = gsap.quickTo(cursor, "x", {
-        duration: 0.6,
-        ease: "power3",
-      });
-      const yTo = gsap.quickTo(cursor, "y", {
-        duration: 0.6,
-        ease: "power3",
-      });
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
 
-      const firstMovement = false;
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [rawX, rawY, rawOpacity]);
 
-      const handleMouseMove = (event: MouseEvent) => {
-        if (firstMovement) {
-          opacityTo(1);
-        }
+  const Cursor = useMemo(() => {
+    const CursorComponent: FC = () => (
+      <motion.div
+        className="cursor"
+        style={{
+          left: x,
+          top: y,
+          opacity,
+        }}
+      >
+        <div />
+      </motion.div>
+    );
 
-        xTo(event.clientX);
-        yTo(event.clientY);
-      };
+    CursorComponent.displayName = "Cursor";
 
-      window.addEventListener("mousemove", handleMouseMove);
-
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-      };
-    },
-    { scope: cursorRef, dependencies: [] },
-  );
+    return CursorComponent;
+  }, [x, y, opacity]);
 
   return { Cursor };
 };

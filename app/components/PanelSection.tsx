@@ -41,14 +41,13 @@ const PanelSectionBase = forwardRef<
     {
       children,
       className,
-      style,
       minScale = 0.7,
       minOpacity = 0.5,
       disableScale = false,
       disableFade = false,
       clampTail = true,
       clampTailVh = DEFAULT_CLAMP_VH,
-      ...rest
+      ...props
     },
     forwardedRef,
   ) => {
@@ -107,8 +106,6 @@ const PanelSectionBase = forwardRef<
     );
     const blur = useTransform(
       clampedProgress,
-      // [0, 0.85, 1],
-      // ["blur(0px)", "blur(0px)", "blur(12px)"],
       [0, 1],
       ["blur(0px)", "blur(4px)"],
     );
@@ -131,12 +128,11 @@ const PanelSectionBase = forwardRef<
         ref={assignWrapperRef}
         className={cn("will-change-transform", className)}
         style={{
-          ...style,
           scale: disableScale ? undefined : scale,
           opacity: disableFade ? undefined : opacity,
           filter: blur,
         }}
-        {...rest}
+        {...props}
       >
         {children}
       </motion.section>

@@ -1,88 +1,83 @@
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { useEffect, useRef, type RefObject } from "react";
+import { cancelFrame, frame } from "motion/react";
+import {
+  useEffect,
+  useRef,
+  type RefObject,
+  type MutableRefObject,
+} from "react";
 
-gsap.registerPlugin(ScrollTrigger);
+interface UseSmoothScrollParams {
+  bodyDiv: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLElement | null>;
+  disable?: boolean;
+}
 
 export const useSmoothScroll = ({
   bodyDiv,
   contentRef,
   disable = false,
-}: {
-  bodyDiv: RefObject<HTMLElement | null>;
-  contentRef: RefObject<HTMLElement | null>;
-  disable?: boolean;
-}) => {
-  const lenisRef = useRef<Lenis>();
+}: UseSmoothScrollParams): MutableRefObject<Lenis | null> => {
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    if (disable) return;
+    if (disable) {
+      lenisRef.current?.destroy();
+      lenisRef.current = null;
+
+      return;
+    }
 
     const wrapper = bodyDiv.current;
     const content = contentRef.current;
 
     if (!wrapper || !content) return;
-
-    let currentScroll = 0;
-
-    if (lenisRef.current != null) return;
+    if (lenisRef.current) return;
 
     const lenis = new Lenis({
-      // main div as scroll container
       wrapper,
-      // child as scrollable content
       content,
-      // listen for wheel/touch on that element
       eventsTarget: wrapper,
-
       smoothWheel: true,
       syncTouch: true,
-      autoRaf: true,
     });
 
     lenisRef.current = lenis;
 
-    const handleLenisScroll = ({ scroll }: { scroll: number }) => {
-      currentScroll = scroll;
-      ScrollTrigger.update();
+    // manual animation frame
+    let rafId: number;
+    const animate = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(animate);
     };
 
-    lenis.on("scroll", handleLenisScroll);
+    rafId = requestAnimationFrame(animate);
 
-    ScrollTrigger.scrollerProxy(wrapper, {
-      scrollTop(value) {
-        if (typeof value === "number") {
-          lenis.scrollTo(value, { immediate: true });
-        }
-
-        return currentScroll;
-      },
-      getBoundingClientRect: () => ({
-        top: 0,
-        left: 0,
-        width: window.innerWidth,
-        height: window.innerHeight,
-      }),
-      pinType: wrapper.style.transform ? "transform" : "fixed",
-    });
-
+    // resize handling
     const resizeObserver =
       typeof ResizeObserver !== "undefined"
-        ? new ResizeObserver(() => ScrollTrigger.refresh())
+        ? new ResizeObserver(() => lenis.resize())
         : undefined;
 
     if (resizeObserver) {
       resizeObserver.observe(content);
     }
 
-    ScrollTrigger.refresh();
+    // motion/react integration
+    function update({ timestamp }: { timestamp: number }) {
+      lenisRef.current?.raf(timestamp);
+    }
+
+    frame.update(update, true);
 
     return () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
+      resizeObserver?.disconnect();
+      cancelAnimationFrame(rafId);
+      cancelFrame(update);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, [bodyDiv, contentRef, disable]);
+
+  return lenisRef;
 };

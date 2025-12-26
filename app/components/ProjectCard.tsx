@@ -35,10 +35,10 @@ export const ProjectCard: FC<{
           <div className="flex flex-row gap-4 items-center">
             <h3 className="font-medium">{data.title}</h3>
             <div className="flex flex-row gap-2">
-              <Button href={undefined} variant="plain">
+              <Button variant="plain">
                 <IconLink />
               </Button>
-              <Button href={undefined} variant="plain">
+              <Button variant="plain">
                 <IconBrandGitlab />
               </Button>
             </div>
