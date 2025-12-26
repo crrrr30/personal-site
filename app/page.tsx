@@ -21,37 +21,41 @@ const HomePage: FC = () => {
   }
 
   return (
-    <PageInViewContext.Provider value={animationComplete}>
-      <div>
-        <div
-          aria-busy={!animationComplete}
-          className={cn(
-            "content",
-            animationComplete
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none",
-          )}
-        >
-          <HomeContent
-            className={
-              animationComplete ? "overflow-y-auto" : "overflow-y-hidden"
-            }
-          />
-        </div>
+    <>
+      <PageInViewContext.Provider value={animationComplete}>
+        <div>
+          <div
+            aria-busy={!animationComplete}
+            className={cn(
+              "content",
+              animationComplete
+                ? "opacity-100 pointer-events-auto"
+                : "opacity-0 pointer-events-none",
+            )}
+          >
+            <HomeContent
+              className={
+                animationComplete ? "overflow-y-auto" : "overflow-y-hidden"
+              }
+            />
+          </div>
 
-        <div
-          aria-hidden="true"
-          className={cn(
-            "fixed inset-0 z-20 transition-opacity duration-700",
-            animationComplete ? "pointer-events-none opacity-0" : "opacity-100",
-          )}
-        >
-          {!animationComplete && (
-            <MarqueeLoader onComplete={() => setAnimationComplete(true)} />
-          )}
+          <div
+            aria-hidden="true"
+            className={cn(
+              "fixed inset-0 z-20 transition-opacity duration-700",
+              animationComplete
+                ? "pointer-events-none opacity-0"
+                : "opacity-100",
+            )}
+          >
+            {!animationComplete && (
+              <MarqueeLoader onComplete={() => setAnimationComplete(true)} />
+            )}
+          </div>
         </div>
-      </div>
-    </PageInViewContext.Provider>
+      </PageInViewContext.Provider>
+    </>
   );
 };
 

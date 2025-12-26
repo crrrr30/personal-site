@@ -103,6 +103,7 @@ export const ProjectsSection: FC = () => {
 
   const { scrollYProgress } = useScroll({
     container: bodyDiv,
+    target: ref,
     offset: ["center end", "center start"],
   });
   const springProg = useSpring(scrollYProgress, {
@@ -116,7 +117,7 @@ export const ProjectsSection: FC = () => {
     <div className="bg-brand">
       <PanelSection
         ref={ref}
-        className={cn("relative overflow-hidden", "text-white")}
+        className="relative overflow-hidden text-white"
         id="projects"
       >
         <div className="mx-auto max-w-container px-page py-12 md:py-24">
@@ -128,7 +129,7 @@ export const ProjectsSection: FC = () => {
 
           <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-8 pb-24">
             {PROJECT_CARDS.map((card) => (
-              <ProjectCardColumn key={card.id} card={card} progress={prog} />
+              <ProjectCards key={card.id} card={card} progress={prog} />
             ))}
           </div>
         </div>
@@ -137,7 +138,7 @@ export const ProjectsSection: FC = () => {
   );
 };
 
-const ProjectCardColumn: FC<{
+const ProjectCards: FC<{
   card: ProjectCardConfig;
   progress: MotionValue<number>;
 }> = ({ card, progress }) => {

@@ -40,18 +40,10 @@ export const useSmoothScroll = ({
       eventsTarget: wrapper,
       smoothWheel: true,
       syncTouch: true,
+      autoRaf: false,
     });
 
     lenisRef.current = lenis;
-
-    // manual animation frame
-    let rafId: number;
-    const animate = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(animate);
-    };
-
-    rafId = requestAnimationFrame(animate);
 
     // resize handling
     const resizeObserver =
@@ -72,7 +64,6 @@ export const useSmoothScroll = ({
 
     return () => {
       resizeObserver?.disconnect();
-      cancelAnimationFrame(rafId);
       cancelFrame(update);
       lenis.destroy();
       lenisRef.current = null;

@@ -30,18 +30,19 @@ export default function Error({
           className={cn(
             "px-page pb-48",
             "grow",
-            "flex flex-col justify-end items-start gap-32",
+            "flex flex-col justify-end items-start gap-16 md:gap-32",
           )}
         >
           <div
             className={cn(
-              "md:[&_*]:text-[144px] [&_*]:tracking-tighter [&_*]:leading-[0.75em]",
+              "[&_*]:text-[4rem] md:[&_*]:text-[9rem] [&_*]:font-thin",
+              "[&_*]:tracking-[-0.075em] [&_*]:leading-[0.75em]",
               "flex flex-col items-start",
             )}
           >
-            <SplitText delay={0} text="Something" />
-            <SplitText delay={0.15} text="went" />
-            <SplitText delay={0.3} text="wrong" />
+            <SplitText delay={0} splitDelay={25} text="Something" />
+            <SplitText delay={0.15} splitDelay={25} text="went" />
+            <SplitText delay={0.3} splitDelay={25} text="wrong" />
           </div>
 
           <TextButton text="Try again" onPress={() => reset()} />

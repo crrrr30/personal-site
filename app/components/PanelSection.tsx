@@ -60,7 +60,6 @@ const PanelSectionBase = forwardRef<
       offset: ["start start", "end start"],
     });
 
-    const easedProgress = useSpring(scrollYProgress, defaultSpring);
     const { height } = useElementSize(wrapperRef);
     const vh = useVh();
 
@@ -81,7 +80,7 @@ const PanelSectionBase = forwardRef<
 
     clampStartRef.current = clampStart;
 
-    const clampedProgress = useTransform(easedProgress, (value) => {
+    const clampedScrollProgress = useTransform(scrollYProgress, (value) => {
       const start = clampStartRef.current;
 
       if (start == null) return value;
@@ -94,18 +93,20 @@ const PanelSectionBase = forwardRef<
       return Math.min(Math.max((value - start) / span, 0), 1);
     });
 
+    const easedProgress = useSpring(clampedScrollProgress, defaultSpring);
+
     const scale = useTransform(
-      clampedProgress,
-      [0, 0.6, 1],
+      easedProgress,
+      [0, 0.9, 1],
       [1, minScale, minScale],
     );
     const opacity = useTransform(
-      clampedProgress,
+      easedProgress,
       [0, 0.85, 1],
       [1, minOpacity, 0],
     );
     const blur = useTransform(
-      clampedProgress,
+      easedProgress,
       [0, 1],
       ["blur(0px)", "blur(4px)"],
     );

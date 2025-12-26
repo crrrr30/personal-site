@@ -1,49 +1,76 @@
 "use client";
 
 import { IconArrowUpRight } from "justd-icons";
+import Link from "next/link";
 import { Button as NativeButton } from "react-aria-components";
 
 import { appEasingClass, appEasingCss } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
+const VARIANT_BASE =
+  "px-8 py-3 flex justify-center items-center group opacity-100 hover:opacity-90 transition-opacity";
+
 export const Button: React.FC<
   Parameters<typeof NativeButton>[0] & {
     href?: string;
     variant?: "primary" | "outline" | "plain";
+    target?: React.HTMLAttributeAnchorTarget;
+    rel?: string;
   }
-> = ({ children, variant = "primary", className, href, ...props }) => {
-  if (href !== undefined) {
-    props.onPress = () => window.open(href);
+> = ({
+  children,
+  variant = "primary",
+  className,
+  href,
+  target,
+  rel,
+  ...props
+}) => {
+  const content = (
+    <>
+      {children}
+      {["primary", "outline"].includes(variant) ? (
+        <span className="w-0 group-hover:w-8 transition-all overflow-hidden">
+          <IconArrowUpRight aria-hidden="true" className="ml-auto size-4" />
+        </span>
+      ) : null}
+    </>
+  );
+
+  const variantClasses =
+    variant === "plain"
+      ? undefined
+      : cn(
+          VARIANT_BASE,
+          appEasingClass,
+          variant === "primary"
+            ? "bg-brand text-white"
+            : variant === "outline"
+              ? "bg-transparent text-brand border border-brand"
+              : undefined,
+        );
+
+  if (href) {
+    const isExternal = /^https?:\/\//.test(href);
+    const resolvedTarget = target ?? (isExternal ? "_blank" : undefined);
+    const resolvedRel =
+      rel ?? (resolvedTarget === "_blank" ? "noreferrer" : undefined);
+
+    return (
+      <Link
+        className={cn(variantClasses, className)}
+        href={href}
+        rel={resolvedRel}
+        target={resolvedTarget}
+      >
+        {content}
+      </Link>
+    );
   }
 
   return (
-    <NativeButton
-      className={
-        variant !== "plain"
-          ? cn(
-              "px-8 py-3 flex justify-center items-center",
-              "group",
-              `opacity-100 hover:opacity-90 transition-opacity`,
-              appEasingClass,
-              variant === "primary"
-                ? "bg-brand text-white"
-                : variant === "outline"
-                  ? "bg-transparent text-brand border border-brand"
-                  : undefined,
-              className,
-            )
-          : undefined
-      }
-      {...props}
-    >
-      <>
-        {children}
-        {["primary", "outline"].includes(variant) ? (
-          <span className="w-0 group-hover:w-8 transition-all overflow-hidden">
-            <IconArrowUpRight className="ml-auto size-4" />
-          </span>
-        ) : null}
-      </>
+    <NativeButton className={cn(variantClasses, className)} {...props}>
+      {content}
     </NativeButton>
   );
 };

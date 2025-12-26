@@ -30,7 +30,7 @@ export const ProjectCard: FC<{
   <BlurFade className={className} delay={animDelay}>
     <div className="w-full">
       <div className="w-full h-[200px] flex justify-center items-center overflow-hidden">
-        <Image alt={alt} src={src} />
+        <Image alt={alt || `${title} preview`} src={src} />
       </div>
 
       <Spacer h={1.5} />
@@ -44,13 +44,23 @@ export const ProjectCard: FC<{
             <h3 className="font-medium">{title}</h3>
             <div className="flex flex-row gap-2">
               {projectLink != null ? (
-                <Button href={projectLink} variant="plain">
-                  <IconLink />
+                <Button
+                  aria-label={`Open ${title} project`}
+                  href={projectLink}
+                  variant="plain"
+                >
+                  <IconLink aria-hidden="true" />
+                  <span className="sr-only">{`Open ${title}`}</span>
                 </Button>
               ) : null}
               {gitlabLink != null ? (
-                <Button href={gitlabLink} variant="plain">
-                  <IconBrandGitlab />
+                <Button
+                  aria-label={`View ${title} source on GitLab`}
+                  href={gitlabLink}
+                  variant="plain"
+                >
+                  <IconBrandGitlab aria-hidden="true" />
+                  <span className="sr-only">{`View ${title} source on GitLab`}</span>
                 </Button>
               ) : null}
             </div>
