@@ -1,5 +1,5 @@
 .marquee-loader {
-  @apply flex h-screen w-screen items-center justify-center bg-gray-50 text-black;
+  @apply flex h-screen w-screen items-center justify-center bg-gray-100 text-black;
 }
 
 .marquee-loader__inner {

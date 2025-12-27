@@ -57,7 +57,8 @@ const PanelSectionBase = forwardRef<
     const { scrollYProgress } = useScroll({
       container: bodyDiv,
       target: wrapperRef,
-      offset: ["start start", "end start"],
+      // 30% from top of target to end of target, intersecting viewport top
+      offset: ["0.3 start", "end start"],
     });
 
     const { height } = useElementSize(wrapperRef);
