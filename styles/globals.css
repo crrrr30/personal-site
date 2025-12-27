@@ -48,6 +48,10 @@ li {
   list-style-type: disc;
 }
 
+nav li {
+  list-style-type: none;
+}
+
 .full-bleed {
   width: 100vw;
   margin-left: calc(50% - 50vw); /* pull outward from centered container */

@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useEffect, useId, useState, type FC } from "react";
+import { useEffect, useId, useRef, useState, type FC } from "react";
 
+import { useFocusTrap } from "@/app/hooks/useFocusTrap";
+import { useScrollLock } from "@/app/hooks/useScrollLock";
+import { useBodyDivContext } from "@/app/providers/BodyDivContext";
 import { BlurFade } from "@/components/BlurFade";
 import Link from "@/components/Link";
 import { appEasing } from "@/lib/animations";
@@ -27,17 +30,7 @@ export function NavBar() {
           <p>BEHIND THE SCREEN</p>
         </BlurFade>
 
-        <ul className="flex flex-row md:gap-16 lg:gap-32 list-none">
-          {links.map(({ text, href }, index) => (
-            <li key={href}>
-              <BlurFade delay={0.2 * (index + 1)}>
-                <Link href={href} variant="inverted">
-                  {text}
-                </Link>
-              </BlurFade>
-            </li>
-          ))}
-        </ul>
+        <NavLinks className="items-center" direction="row" />
       </nav>
       <SmallNavBar className="flex md:hidden" />
     </>
@@ -48,6 +41,8 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const srText = open ? "Close navigation menu" : "Open navigation menu";
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const bodyDiv = useBodyDivContext();
 
   useEffect(() => {
     if (!open) {
@@ -64,6 +59,9 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open]);
+
+  useFocusTrap({ containerRef: menuRef, active: open });
+  useScrollLock({ active: open, scrollContainerRef: bodyDiv });
 
   return (
     <nav
@@ -93,8 +91,11 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
       </button>
 
       <motion.div
+        ref={menuRef}
         animate={open ? "open" : "collapsed"}
-        aria-hidden={!open}
+        aria-hidden={open ? undefined : true}
+        aria-label="Primary navigation menu"
+        aria-modal={open ? "true" : undefined}
         className={cn(
           "fixed top-[6rem] left-0 right-0 overflow-clip",
           "px-page",
@@ -102,6 +103,7 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
         )}
         id={menuId}
         initial="collapsed"
+        role="dialog"
         transition={{
           duration: 1,
           ...appEasing,
@@ -115,17 +117,14 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
           },
         }}
       >
-        <ul className="flex flex-col list-none">
-          {links.map(({ text, href }, index) => (
-            <li key={`${text}-${index}`} className="py-4">
-              <BlurFade delay={0.1 * index}>
-                <Link href={href} tabIndex={open ? 0 : -1} variant="inverted">
-                  {text}
-                </Link>
-              </BlurFade>
-            </li>
-          ))}
-        </ul>
+        <NavLinks
+          delayStartIndex={0}
+          delayStep={0.1}
+          direction="column"
+          itemClassName="py-4"
+          linkTabIndex={open ? 0 : -1}
+          onLinkClick={() => setOpen(false)}
+        />
       </motion.div>
     </nav>
   );
@@ -172,4 +171,51 @@ const NavToggle: FC = () => (
       ],
     )}
   />
+);
+
+const NavLinks: FC<{
+  direction: "row" | "column";
+  className?: string;
+  itemClassName?: string;
+  delayStep?: number;
+  delayStartIndex?: number;
+  linkTabIndex?: number;
+  onLinkClick?: () => void;
+}> = ({
+  direction,
+  className,
+  itemClassName,
+  delayStep = 0.2,
+  delayStartIndex = 1,
+  linkTabIndex,
+  onLinkClick,
+}) => (
+  <ul
+    className={cn(
+      "flex list-none",
+      direction === "row" ? "flex-row md:gap-16 lg:gap-32" : "flex-col",
+      className,
+    )}
+  >
+    {links.map(({ text, href }, index) => (
+      <li
+        key={href}
+        className={cn(
+          direction === "column" ? "py-4" : undefined,
+          itemClassName,
+        )}
+      >
+        <BlurFade delay={delayStep * (index + delayStartIndex)}>
+          <Link
+            href={href}
+            tabIndex={linkTabIndex}
+            variant="inverted"
+            onClick={onLinkClick}
+          >
+            {text}
+          </Link>
+        </BlurFade>
+      </li>
+    ))}
+  </ul>
 );

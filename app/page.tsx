@@ -1,16 +1,31 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 
 import { HomeContent } from "@/app/components/HomeContent";
 import { PageInViewContext } from "@/app/providers/PageInViewContext";
 import { MarqueeLoader } from "@/components/MarqueeLoader";
 import { cn } from "@/lib/utils";
 
-const disableAnimation = false;
+const disableAnimation =
+  process.env.NEXT_PUBLIC_DISABLE_MARQUEE_LOADER === "true";
 
 const HomePage: FC = () => {
   const [animationComplete, setAnimationComplete] = useState(disableAnimation);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DISABLE_MARQUEE_LOADER !== "true") {
+      return;
+    }
+
+    // Reminder so the loader isn't accidentally left disabled in commits.
+    if (process.env.NODE_ENV !== "production") {
+      // eslint-disable-next-line no-console -- Development-only warning.
+      console.warn(
+        "[MarqueeLoader] NEXT_PUBLIC_DISABLE_MARQUEE_LOADER is true. Remove or unset it before deploying.",
+      );
+    }
+  }, []);
 
   if (disableAnimation) {
     return (
