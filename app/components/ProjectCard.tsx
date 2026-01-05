@@ -2,7 +2,7 @@ import { IconBrandGitlab, IconLink } from "justd-icons";
 import Image, { type StaticImageData } from "next/image";
 import { type FC } from "react";
 
-import { BlurFade } from "@/components/BlurFade";
+import { type BlurFade as NativeBlurFade } from "@/components/BlurFade";
 import { Button } from "@/components/Button";
 import { Spacer } from "@/components/Spacer";
 
@@ -20,12 +20,14 @@ export const ProjectCard: FC<{
   alt: string;
   data: CardData;
   className?: string;
+  BlurFade: typeof NativeBlurFade;
 }> = ({
   animDelay,
   src,
   alt,
   data: { index, title, body, projectLink, gitlabLink },
   className,
+  BlurFade,
 }) => (
   <BlurFade className={className} delay={animDelay}>
     <div className="w-full">

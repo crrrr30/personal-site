@@ -129,7 +129,12 @@ export const ProjectsSection: FC = () => {
 
           <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-8 pb-24">
             {PROJECT_CARDS.map((card) => (
-              <ProjectCards key={card.id} card={card} progress={prog} />
+              <ProjectCards
+                key={card.id}
+                BlurFade={BlurFade}
+                card={card}
+                progress={prog}
+              />
             ))}
           </div>
         </div>
@@ -141,7 +146,8 @@ export const ProjectsSection: FC = () => {
 const ProjectCards: FC<{
   card: ProjectCardConfig;
   progress: MotionValue<number>;
-}> = ({ card, progress }) => {
+  BlurFade: typeof NativeBlurFade;
+}> = ({ card, progress, BlurFade }) => {
   const translateY = useTransform(
     progress,
     [0, 1],
@@ -150,6 +156,7 @@ const ProjectCards: FC<{
 
   const cardElement = (
     <ProjectCard
+      BlurFade={BlurFade}
       alt={card.alt}
       animDelay={card.animDelay}
       className={cn(card.className, !card.translateRange && "flex-1")}

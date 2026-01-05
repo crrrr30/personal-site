@@ -117,7 +117,7 @@ const MobileSections: FC = () => {
 
 const MobileHeroSection: FC = () => {
   const ref = useRef(null);
-  const BlurFade = useBlurFade(ref);
+  const BlurFade = useBlurFade(ref, { once: true });
   const Divider = useDivider(ref);
 
   return (
@@ -218,7 +218,7 @@ const MobileDescription: FC<{
 
 const MobileDescriptionSection: FC = () => {
   const ref = useRef(null);
-  const BlurFade = useBlurFade(ref);
+  const BlurFade = useBlurFade(ref, { once: true });
   const Divider = useDivider(ref);
 
   return (
@@ -278,7 +278,7 @@ const MobileFlowy: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
 
 const MobileFlowySection: FC = () => {
   const ref = useRef(null);
-  const BlurFade = useBlurFade(ref);
+  const BlurFade = useBlurFade(ref, { once: true });
 
   return (
     <PanelSection ref={ref} className="block md:hidden">

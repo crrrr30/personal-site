@@ -175,7 +175,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
   const animationCompletedRef = useRef(false);
   const completedCountRef = useRef(0);
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
     if (document.fonts.status === "loaded") {
@@ -208,7 +208,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
 
   const inViewOptions = useMemo<InViewOptions>(
     () => ({
-      once: true,
+      once: false,
       amount: normalizedThreshold === 0 ? 0.01 : normalizedThreshold,
       margin: rootMargin as MarginType,
     }),
@@ -224,17 +224,27 @@ export const SplitText: React.FC<SplitTextProps> = ({
   useEffect(() => {
     completedCountRef.current = 0;
     animationCompletedRef.current = false;
-    setHasAnimated(false);
+    setShouldAnimate(false);
   }, [text, animationLevel, from, to, duration, splitDelay]);
 
   useEffect(() => {
-    if (!hasAnimated && fontsLoaded && isInView) {
-      setHasAnimated(true);
+    if (!fontsLoaded) {
+      return;
     }
-  }, [fontsLoaded, isInView, hasAnimated]);
+
+    if (isInView && !shouldAnimate) {
+      completedCountRef.current = 0;
+      animationCompletedRef.current = false;
+      setShouldAnimate(true);
+    } else if (!isInView && shouldAnimate) {
+      setShouldAnimate(false);
+      completedCountRef.current = 0;
+      animationCompletedRef.current = false;
+    }
+  }, [fontsLoaded, isInView, shouldAnimate]);
 
   const handleTokenComplete = useCallback(() => {
-    if (!hasAnimated || animatedCount === 0) return;
+    if (!shouldAnimate || animatedCount === 0) return;
     completedCountRef.current += 1;
     if (
       completedCountRef.current >= animatedCount &&
@@ -243,7 +253,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
       animationCompletedRef.current = true;
       onLetterAnimationComplete?.();
     }
-  }, [animatedCount, hasAnimated, onLetterAnimationComplete]);
+  }, [animatedCount, onLetterAnimationComplete, shouldAnimate]);
 
   const renderTag = () => {
     const style: React.CSSProperties = {
@@ -284,7 +294,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
       return (
         <motion.span
           key={token.key}
-          animate={hasAnimated ? "visible" : "hidden"}
+          animate={shouldAnimate ? "visible" : "hidden"}
           className={`split-${token.type}`}
           initial="hidden"
           style={itemStyle}

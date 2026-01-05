@@ -26,7 +26,7 @@ export function NavBar() {
         aria-label="Primary navigation"
         className="hidden md:flex flex-row justify-between px-page py-8"
       >
-        <BlurFade offset="2em">
+        <BlurFade offset="2em" once={true}>
           <p className="uppercase">Behind the Screen</p>
         </BlurFade>
 
@@ -209,7 +209,7 @@ const NavLinks: FC<{
           itemClassName,
         )}
       >
-        <BlurFade delay={delayStep * (index + delayStartIndex)}>
+        <BlurFade delay={delayStep * (index + delayStartIndex)} once={true}>
           <Link
             href={href}
             tabIndex={linkTabIndex}
