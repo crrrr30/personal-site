@@ -1,0 +1,8 @@
+build:
+  stage: build
+  script:
+    - pnpm build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - .next
