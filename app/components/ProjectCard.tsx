@@ -41,7 +41,7 @@ export const ProjectCard: FC<{
         </p>
         <div className="grow">
           <div className="flex flex-row gap-4 items-center">
-            <h3 className="font-medium">{title}</h3>
+            <h3 className="font-medium uppercase">{title}</h3>
             <div className="flex flex-row gap-2">
               {projectLink != null ? (
                 <Button

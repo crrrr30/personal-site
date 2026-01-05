@@ -1,5 +1,21 @@
 .marquee-loader {
-  @apply flex h-screen w-screen items-center justify-center bg-gray-100 text-black;
+  @apply relative flex h-screen w-screen items-center justify-center bg-gray-100 text-black;
+}
+
+.marquee-loader__skip {
+  @apply absolute right-8 top-8 text-sm uppercase tracking-[0.2em];
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.marquee-loader__skip:focus-visible {
+  @apply outline-none ring-2 ring-black ring-offset-4 ring-offset-gray-100;
+}
+
+.marquee-loader__skip:hover,
+.marquee-loader__skip:focus-visible {
+  @apply text-gray-700;
 }
 
 .marquee-loader__inner {
@@ -11,7 +27,7 @@
 }
 
 .marquee-loader__token {
-  @apply inline-block leading-none text-[2rem] md:text-[4rem] tracking-tighter;
+  @apply inline-block leading-none text-[2rem] md:text-[4rem] tracking-tighter uppercase;
   transform: translateY(100%);
 }
 

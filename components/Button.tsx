@@ -82,7 +82,7 @@ export const TextButton: React.FC<
     offsetIncrement?: number;
   }
 > = ({ offsetIncrement = 0.01, text, variant, ...props }) => {
-  const { ["aria-label"]: ariaLabelProp, ...buttonProps } = props;
+  const { ["aria-label"]: ariaLabelProp, className, ...buttonProps } = props;
   const ariaLabel = ariaLabelProp ?? text;
 
   const chars = text.split("").map((char, index) => (
@@ -105,7 +105,7 @@ export const TextButton: React.FC<
     <>
       <Button
         aria-label={ariaLabel}
-        className="staggering"
+        className={cn("staggering", className)}
         variant={variant}
         {...buttonProps}
       >

@@ -48,11 +48,11 @@ export const MeetMeSection = () => {
               </div>
 
               <span className="flex flex-col">
-                {["MEET", "JONATHAN", "CUI"].map((word, i) => (
+                {["Meet", "Jonathan", "Cui"].map((word, i) => (
                   <BlurFade key={i} delay={0.3 + 0.1 * i}>
                     <p
                       className={cn(
-                        "text-white md:text-brand",
+                        "text-white md:text-brand uppercase",
                         "text-7xl",
                         "tracking-tighter font-light md:font-medium",
                       )}

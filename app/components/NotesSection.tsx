@@ -26,7 +26,9 @@ export const NotesSection = () => {
         )}
       >
         <BlurFade>
-          <h3 className="text-4xl text-brand font-medium">NOTES SECTION</h3>
+          <h3 className="text-4xl text-brand font-medium uppercase">
+            Notes Section
+          </h3>
         </BlurFade>
 
         <NotesList />
@@ -37,7 +39,7 @@ export const NotesSection = () => {
 
 const notesData: Array<{ header: string; content: ReactNode; href: string }> = [
   {
-    header: "REAL ANALYSIS",
+    header: "Real Analysis",
     content: (
       <p>
         A brief introduction to real analysis in one-variables, covering
@@ -48,7 +50,7 @@ const notesData: Array<{ header: string; content: ReactNode; href: string }> = [
     href: "/assets/files/401.pdf",
   },
   {
-    header: "LINEAR ALGEBRA",
+    header: "Linear Algebra",
     content: (
       <p>
         Elementary topics in abstract linear algebra, including vector spaces
@@ -59,7 +61,7 @@ const notesData: Array<{ header: string; content: ReactNode; href: string }> = [
     href: "/assets/files/436.pdf",
   },
   {
-    header: "THEORY OF COMPUTATION",
+    header: "Theory of Computation",
     content: (
       <p>
         An introduction to the formal Theory of Computation, covering
@@ -70,7 +72,7 @@ const notesData: Array<{ header: string; content: ReactNode; href: string }> = [
     href: "/assets/files/464.pdf",
   },
   {
-    header: "ABSTRACT ALGEBRA",
+    header: "Abstract Algebra",
     content: (
       <p>
         An introductory course to abstract algebra on the elementary theory of
@@ -81,7 +83,7 @@ const notesData: Array<{ header: string; content: ReactNode; href: string }> = [
     href: "/assets/files/435.pdf",
   },
   {
-    header: "FOURIER ANALYSIS",
+    header: "Fourier Analysis",
     content: (
       <p>
         A rigorous course based in Riemann integration on the convergence of
@@ -99,7 +101,7 @@ const NotesList: FC = () => {
     <AnimatedList
       listData={notesData.map(({ header, content, href }) => ({
         header: (
-          <Link className="font-medium" href={href}>
+          <Link className="font-medium uppercase" href={href}>
             {header}
           </Link>
         ),

@@ -41,7 +41,7 @@ const PROJECT_CARDS: readonly ProjectCardConfig[] = [
     alt: "",
     data: {
       index: 1,
-      title: "TASTEMATE",
+      title: "TasteMate",
       body: (
         <p>
           TasteMate is an AI-powered recipe app for people with medical
@@ -59,10 +59,10 @@ const PROJECT_CARDS: readonly ProjectCardConfig[] = [
     alt: "",
     data: {
       index: 2,
-      title: "PROOF VERIFIER",
+      title: "Proof Verifier",
       body: (
         <p>
-          A dependently-typed proof verifier and toy language exploring
+          A dependent-type proof verifier and toy language exploring
           Curry–Howard, written in Rust.
         </p>
       ),
@@ -78,7 +78,7 @@ const PROJECT_CARDS: readonly ProjectCardConfig[] = [
     alt: "",
     data: {
       index: 3,
-      title: "STARLINK AI TOOLING",
+      title: "Starlink AI Tooling",
       body: (
         <p>
           Summer 2025 software engineering intern on Starlink&apos;s support
@@ -171,10 +171,10 @@ const ProjectCards: FC<{
 
 const TitleFadeIn: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
   const components: ReactNode[] = [
-    <h2 key={0}>A CURATED SELECTION</h2>,
-    <h2 key={1}>OF PERSONAL</h2>,
+    <h2 key={0}>A Curated Selection</h2>,
+    <h2 key={1}>of Personal</h2>,
     <h2 key={2}>
-      PROJECTS
+      Projects
       <span key={0} className="inline-block w-24 h-1 bg-white" />
     </h2>,
   ];
@@ -184,7 +184,7 @@ const TitleFadeIn: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
       {components.map((word, i) => (
         <BlurFade
           key={i}
-          className="inline-block [&_h2]:text-6xl font-medium "
+          className="inline-block [&_h2]:text-6xl [&_h2]:uppercase font-medium "
           delay={0.05 * (i + 1)}
           direction="right"
           inViewMargin="-50px 180px"

@@ -2,7 +2,7 @@
 
 import { motion, stagger, useAnimate } from "motion/react";
 import Image, { type StaticImageData } from "next/image";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import imgD from "@/assets/flowy.png";
 import imgA from "@/assets/main-shot.png";
@@ -33,8 +33,8 @@ type LoaderImageConfig = {
 };
 
 const TEXT_COLUMNS: readonly LoaderTextColumnConfig[] = [
-  { id: "given-name", tokens: "JONATHAN".split("") },
-  { id: "family-name", tokens: "CUI".split("") },
+  { id: "given-name", tokens: "Jonathan".split("") },
+  { id: "family-name", tokens: "Cui".split("") },
 ] as const;
 
 const [givenNameColumn, familyNameColumn] = TEXT_COLUMNS;
@@ -77,9 +77,19 @@ const LOADER_IMAGE_SIZES = "(max-width: 768px) 80vw, 30vw";
 
 export function MarqueeLoader({ className, onComplete }: MarqueeLoaderProps) {
   const [ref, animate] = useAnimate();
+  const isCancelledRef = useRef(false);
+
+  const handleSkip = useCallback(() => {
+    if (isCancelledRef.current) {
+      return;
+    }
+
+    isCancelledRef.current = true;
+    onComplete?.();
+  }, [onComplete]);
 
   useEffect(() => {
-    let isCancelled = false;
+    isCancelledRef.current = false;
 
     const animateLoader = async () => {
       await animate(
@@ -149,7 +159,7 @@ export function MarqueeLoader({ className, onComplete }: MarqueeLoaderProps) {
 
       await animate(rootElement, { y: "-100%" }, exitTiming);
 
-      if (!isCancelled) {
+      if (!isCancelledRef.current) {
         onComplete?.();
       }
     };
@@ -157,7 +167,7 @@ export function MarqueeLoader({ className, onComplete }: MarqueeLoaderProps) {
     void animateLoader();
 
     return () => {
-      isCancelled = true;
+      isCancelledRef.current = true;
     };
   }, [animate, onComplete, ref]);
 
@@ -168,6 +178,13 @@ export function MarqueeLoader({ className, onComplete }: MarqueeLoaderProps) {
       layout
       className={cn("marquee-loader", className)}
     >
+      <button
+        className="marquee-loader__skip underlined-link"
+        type="button"
+        onClick={handleSkip}
+      >
+        Skip animation
+      </button>
       <div className="marquee-loader__inner">
         <LoaderTextColumn column={givenNameColumn} />
 

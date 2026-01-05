@@ -27,7 +27,7 @@ export function NavBar() {
         className="hidden md:flex flex-row justify-between px-page py-8"
       >
         <BlurFade offset="2em">
-          <p>BEHIND THE SCREEN</p>
+          <p className="uppercase">Behind the Screen</p>
         </BlurFade>
 
         <NavLinks className="items-center" direction="row" />
@@ -72,8 +72,12 @@ const SmallNavBar: FC<{ className?: string }> = ({ className }) => {
         className,
       )}
     >
-      <Link className="serif tracking-normal text-lg" href="/" variant="plain">
-        BEHIND THE SCREEN
+      <Link
+        className="serif tracking-normal text-lg uppercase"
+        href="/"
+        variant="plain"
+      >
+        Behind the screen
       </Link>
 
       <button

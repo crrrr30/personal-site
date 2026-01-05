@@ -32,7 +32,9 @@ export const AboutSection = () => {
       >
         <div>
           <BlurFade>
-            <h3 className="text-4xl text-brand font-medium">ABOUT SECTION</h3>
+            <h3 className="text-4xl text-brand font-medium uppercase">
+              About section
+            </h3>
           </BlurFade>
 
           <Spacer h={3} />
@@ -40,8 +42,8 @@ export const AboutSection = () => {
           <AnimatedList
             baseDelay={0.2}
             listData={aboutListData.map(({ header, content }) => ({
-              header: <p className="font-medium">{header}</p>,
-              content: <p>{content}</p>,
+              header: <p className="font-medium uppercase">{header}</p>,
+              content: <p className="uppercase">{content}</p>,
             }))}
           />
         </div>
@@ -58,38 +60,47 @@ export const AboutSection = () => {
 
 const aboutListData: Array<{ header: string; content: ReactNode }> = [
   {
-    header: "INTERNSHIP",
+    header: "Internship",
     content: (
       <>
-        SHIPPING AI FEATURES IN LARGE MONOREPOS AT STARLINK WITH 50K+ DAILY
-        CALLS.
+        Shipping AI features in large monorepo at Starlink with 50K+ daily
+        calls.
       </>
     ),
   },
   {
-    header: "RESEARCH",
+    header: "Career",
+    content: (
+      <>
+        Joining Anduril Industries in August 2026 as a Software Engineer in
+        Costa Mesa, CA.
+      </>
+    ),
+  },
+  {
+    header: "Research",
     content: (
       <>
         4{" "}
         <Link href="https://scholar.google.com/citations?user=oRtbHw4AAAAJ&hl=en">
-          PAPERS
+          papers
         </Link>
-        , 400+ CITATIONS, ICLR 2021 SPOTLIGHT PRESENTER.
+        , 400+ citations, ICLR 2021 Spotlight presenter.
       </>
     ),
   },
   {
-    header: "PROJECTS",
+    header: "Projects",
     content: (
       <>
-        CREATOR OF <Link href="https://tastemate.pro">TASTEMATE</Link>, AN AI
-        RECIPE APP FOR MEDICAL DIETS, AND A RUST-BASED CURRY–HOWARD{" "}
-        <Link href="https://math.joncui.sh">PROOF VERIFIER</Link>.
+        Creator of <Link href="https://tastemate.pro">TasteMate</Link>, an AI
+        recipe app for medical diets, and a Rust-based Curry–Howard{" "}
+        <Link href="https://math.joncui.sh">Proof Verifier</Link>.
       </>
     ),
   },
   {
-    header: "ACADEMICS",
-    content: <>DOUBLE MAJOR IN CS & MATH (3.97 GPA, UCSD).</>,
+    header: "Academics",
+    content: <>Double major in CS & Math (3.97 GPA, UCSD).</>,
   },
 ];

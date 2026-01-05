@@ -57,10 +57,10 @@ export const HeroSection: FC = () => {
             >
               <h1
                 className={cn(
-                  "text-brand text-[8rem] lg:text-[12rem] leading-none font-bold",
+                  "text-brand text-[8rem] lg:text-[12rem] leading-none font-bold uppercase",
                 )}
               >
-                JONATHAN
+                Jonathan
               </h1>
             </div>
           </BlurFade>
@@ -134,7 +134,7 @@ const MobileHeroSection: FC = () => {
             "py-24",
             "full-bleed",
             "relative",
-            "text-brand [&_*]:text-9xl [&_*]:leading-none font-bold",
+            "text-brand [&_*]:text-9xl [&_*]:leading-none font-bold [&_h1]:uppercase",
           )}
         >
           <Divider
@@ -151,11 +151,11 @@ const MobileHeroSection: FC = () => {
           />
 
           <BlurFade delay={0.4}>
-            <h1 className="z-10">JONA-</h1>
+            <h1 className="z-10">Jona-</h1>
           </BlurFade>
           <BlurFade delay={0.6}>
             <div className="flex flex-row justify-end z-10">
-              <h1>THAN</h1>
+              <h1>than</h1>
             </div>
           </BlurFade>
         </div>
@@ -204,10 +204,10 @@ const MobileDescription: FC<{
 
         <BlurFade delay={1.2}>
           <div className={cn("w-[20rem]", "flex flex-col gap-4")}>
-            <p>SOFTWARE ENGINEER & RESEARCHER</p>
-            <p className="text-gray-600">
-              BUILDING PRODUCTION-READY AI SYSTEMS, FROM MICRO-VMS TO SUPPORT
-              TOOLING AT STARLINK.
+            <p className="uppercase">Software engineer & researcher</p>
+            <p className="text-gray-600 uppercase">
+              Building production-ready AI systems, from micro-VMs to support
+              tooling at Starlink.
             </p>
           </div>
         </BlurFade>
@@ -253,18 +253,20 @@ const MobileFlowy: FC<{ BlurFade: typeof NativeBlurFade }> = ({ BlurFade }) => {
       <Spacer h={1} />
 
       <BlurFade className="px-page md:px-0" delay={1.0}>
-        <p className="font-medium tracking-[0.24rem]">JONATHAN CUI</p>
+        <p className="font-medium tracking-[0.24rem] uppercase">Jonathan Cui</p>
         <p className="text-sm">San Diego, CA</p>
 
         <Spacer h={1.5} />
 
         <div className="flex flex-row gap-8">
           <TextButton
-            text="PROJECTS"
+            className="uppercase "
+            text="Projects"
             onPress={() => scrollToSection("projects")}
           />
           <TextButton
-            text="NOTES"
+            className="uppercase "
+            text="Notes"
             variant="outline"
             onPress={() => scrollToSection("notes")}
           />
